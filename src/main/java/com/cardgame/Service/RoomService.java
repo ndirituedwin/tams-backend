@@ -24,14 +24,12 @@ import java.util.*;
 @Service
 public class RoomService {
 
-    private final Gameroomrepo gameroomrepo;
     private final Loginrepo loginrepo;
     private final GameRoomrepo gameRoomrepo;
     private final Gameroomusersrepo gameroomusersrepo;
     private final Userbestcardrepo userbestcardrepo;
 
-    public RoomService(Gameroomrepo gameroomrepo, Loginrepo loginrepo, GameRoomrepo gameRoomrepo, Gameroomusersrepo gameroomusersrepo, Userbestcardrepo userbestcardrepo) {
-        this.gameroomrepo = gameroomrepo;
+    public RoomService( Loginrepo loginrepo, GameRoomrepo gameRoomrepo, Gameroomusersrepo gameroomusersrepo, Userbestcardrepo userbestcardrepo) {
         this.loginrepo = loginrepo;
 
         this.gameRoomrepo = gameRoomrepo;
@@ -46,7 +44,7 @@ public class RoomService {
         BigDecimal bigDecimal=new BigDecimal(roomjoinrequest.getMinimumamount());
         log.info("bigdecima {}",bigDecimal);
         User user=loginrepo.findByUID(1L).orElseThrow(() -> new UserNotFoundException("user with the provided uid not found"));
-      Long userin=new Long(1);
+//      Long userin=new Long(1);
         List<GameRoom> gameroomList=gameRoomrepo.findAll();
         if (gameroomList.isEmpty()){
             GameRoom gameRoom=new GameRoom();
@@ -58,7 +56,7 @@ public class RoomService {
             GameRoom savedgameroom=gameRoomrepo.save(gameRoom);
             Gameroomusers gameroomusers=new Gameroomusers();
             gameroomusers.setGameRoom(savedgameroom);
-            gameroomusers.setUserid(user.getUID()+ userin);
+            gameroomusers.setUserid(user.getUID()+ 1L);
             gameroomusersrepo.save(gameroomusers);
         }else{
             List<GameRoom> gameroomList1=gameRoomrepo.findAll();
@@ -77,7 +75,7 @@ public class RoomService {
                 GameRoom savedgameroom1=gameRoomrepo.save(gameRoom1);
                 Gameroomusers gameroomusers1=new Gameroomusers();
                 gameroomusers1.setGameRoom(savedgameroom1);
-                gameroomusers1.setUserid(user.getUID()+ userin);
+                gameroomusers1.setUserid(user.getUID()+ 1L);
                 gameroomusersrepo.save(gameroomusers1);
                 log.info("here instead");
             }else {
