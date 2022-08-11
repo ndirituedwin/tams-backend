@@ -1,17 +1,20 @@
 package com.cardgame.Dto.responses;
 
 
-import lombok.Builder;
-import lombok.Data;
+import java.util.List;
 
-
-public class UserbestCardResponse {
+public class Userbestthirtycards {
 
     private String message;
 
-    public UserbestCardResponse(String message) {
+    public Userbestthirtycards() {
+    }
+
+    public Userbestthirtycards(String message) {
         this.message = message;
     }
+
+
 
     public String getMessage() {
         return message;

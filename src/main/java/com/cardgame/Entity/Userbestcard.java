@@ -22,4 +22,28 @@ public class Userbestcard {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Long getUserbestcard() {
+        return userbestcard;
+    }
+
+    public void setUserbestcard(Long userbestcard) {
+        this.userbestcard = userbestcard;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

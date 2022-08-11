@@ -1,15 +1,15 @@
 package com.cardgame.Dto.responses;
 
+import java.math.BigDecimal;
 
-import lombok.Builder;
-import lombok.Data;
+public class Cardfeerequestresponse {
 
 
-public class UserbestCardResponse {
+
 
     private String message;
 
-    public UserbestCardResponse(String message) {
+    public Cardfeerequestresponse(String message) {
         this.message = message;
     }
 

@@ -1,15 +1,16 @@
 package com.cardgame.Dto.responses;
 
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
-public class UserbestCardResponse {
+public class JoinRoomResponse {
 
-    private String message;
+private String message;
 
-    public UserbestCardResponse(String message) {
+    public JoinRoomResponse(String message) {
         this.message = message;
     }
 
