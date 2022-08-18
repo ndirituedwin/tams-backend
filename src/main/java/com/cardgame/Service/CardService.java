@@ -76,7 +76,8 @@ public class CardService {
        long numberofreplications=Long.parseLong(cardduplicaterequest.getNumberofreplications());
         boolean cardexists=cardrepo.existsById(cardid);
         if (!cardexists){
-            return Cardduplicateresponse.builder().message("Card with the given id "+cardduplicaterequest.getCardid()+" not found !").build();
+            return new Cardduplicateresponse("Card with the given id "+cardduplicaterequest.getCardid()+" not found !");
+//            return new Cardduplicateresponse("Card with the given id "+cardduplicaterequest.getCardid()+" not found !");
         }
         Card card=cardrepo.findById(cardid).orElseThrow(() -> new CardNotFoundException("card with the given id could not be found "+cardduplicaterequest.getCardid()));
        try {
@@ -87,9 +88,9 @@ public class CardService {
                i++;
            }
 
-           return Cardduplicateresponse.builder().message("card duplicated "+cardduplicaterequest.getNumberofreplications()+" times").build();
+           return new Cardduplicateresponse("card duplicated "+cardduplicaterequest.getNumberofreplications()+" times");
        }catch (Exception e){
-           return Cardduplicateresponse.builder().message("An exception has occurred while duplicating card "+e.getMessage()).build();
+           return new Cardduplicateresponse("An exception has occurred while duplicating card "+e.getMessage());
        }
 
     }
@@ -103,7 +104,7 @@ public class CardService {
           long countusers=loginrepo.count();
         boolean cardexists=cardrepo.existsById(cardid);
         if (!cardexists){
-            return Cardduplicateresponse.builder().message("Card with the given id "+cardbyratioduplicaterequest.getCardid()+" not found !").build();
+            return new Cardduplicateresponse("Card with the given id "+cardbyratioduplicaterequest.getCardid()+" not found !");
         }
         Card card=cardrepo.findById(cardid).orElseThrow(() -> new CardNotFoundException("card with the given id could not be found "+cardbyratioduplicaterequest.getCardid()));
         try {
@@ -120,10 +121,10 @@ public class CardService {
                 }
 
             }
-            return Cardduplicateresponse.builder().message("card duplicated by user ratio "+replications+" times").build();
+            return new Cardduplicateresponse("card duplicated by user ratio "+replications+" times");
 
         }catch (Exception e){
-            return Cardduplicateresponse.builder().message("An exception "+e.getMessage()).build();
+            return new Cardduplicateresponse("An exception "+e.getMessage());
         }
 
 
@@ -137,9 +138,8 @@ public class CardService {
         int pack=(int)pack1.getNumberofcards();
 
         List<Cardduplicate> cardduplicates=cardduplicaterepo.findAllByIsTakenEquals(false);
-        log.info("the cards {}",cardduplicates.size());
-        long id=2;
-        User user=loginrepo.findById(id).orElseThrow(() -> new UserNotFoundException("user with the given id could not be found "));
+////        log.info("the cards {}",cardduplicates.size());
+        User user=loginrepo.findByUID(selectpackrequest.getUid()).orElseThrow(() -> new UserNotFoundException("user with the given id could not be found "));
 
         Collections.shuffle(cardduplicates);
 
@@ -152,10 +152,10 @@ public class CardService {
                 cardduplicate.setTaken(true);
                 cardduplicaterepo.save(cardduplicate);
             }
-            return SelectPackRequestResponse.builder().message("user cards saved for pack "+selectpackrequest.getPackid()).build();
+            return new SelectPackRequestResponse("user cards saved for pack "+selectpackrequest.getPackid());
 
         }catch (Exception e){
-            return SelectPackRequestResponse.builder().message("an exception has occurred while trying to select pack "+e.getMessage()).build();
+            return new SelectPackRequestResponse("an exception has occurred while trying to select pack "+e.getMessage());
         }
 
     }
@@ -165,13 +165,12 @@ public class CardService {
        String[] split30bestcards=thebest30cards.split(",");
        List<Long> converttolist=new ArrayList<>(0);
         Arrays.stream(split30bestcards).forEach(s1 -> converttolist.add(Long.parseLong(s1)));
-       long userid=1;
-       User user =loginrepo.findById(userid).orElseThrow(() -> new UserNotFoundException("user with given id could not be found "));
+       User user =loginrepo.findByUID(userbestcardrequest.getUid()).orElseThrow(() -> new UserNotFoundException("user with given id could not be found "));
         List<UserCard> userCardList=userCardRepo.findAllByUser(user);
         List<Long> usercardids=new ArrayList<>(0);
         userCardList.forEach(userCard -> usercardids.add(userCard.getId()));
-        log.info("the ids {}",usercardids);
-        log.info("the converttolist {}",converttolist);
+//        log.info("the ids {}",usercardids);
+//        log.info("the converttolist {}",converttolist);
        try {
            AtomicInteger counter = new AtomicInteger();
            converttolist.stream().forEach(aLong -> {
@@ -207,8 +206,7 @@ public class CardService {
         Pack pack1=packrepo.findById(Long.parseLong(selectpackrequest.getPackid())).orElseThrow(() -> new PackNotFoundException("pack with the provided id could not be found "+selectpackrequest.getPackid()));
         int pack=(int)pack1.getNumberofcards();
 
-        long id=1;
-        User user=loginrepo.findById(id).orElseThrow(() -> new UserNotFoundException("user with the given id could not be found "));
+        User user=loginrepo.findByUID(selectpackrequest.getUid()).orElseThrow(() -> new UserNotFoundException("user with the given id could not be found "));
 
 
         try {
@@ -275,7 +273,7 @@ public class CardService {
         if (buyCardRequest.getAmounttobuy().compareTo(BigDecimal.ZERO)<1){
             return new Buycardresponse("Invalid buy amount entered");
         }
-        User user=loginrepo.findById(1L).orElseThrow(() -> new UserNotFoundException("user not found"));
+        User user=loginrepo.findByUID(buyCardRequest.getUid()).orElseThrow(() -> new UserNotFoundException("user not found"));
         try {
             UserCard userCard = userCardRepo.findById(Long.parseLong(buyCardRequest.getCardid())).orElseThrow(() -> new UserCardNotFoundException("The card could not be found"));
             Usercardfee usercardfee = usercardfeerepo.findByUserCard(userCard).orElseThrow(() -> new CardNotFoundException("The card fee has not been set for the given user card"));
@@ -332,23 +330,23 @@ public class CardService {
 
     }
 
-    public PagedResponse<UserCardResponse> findallcardsbyuser(int page, int size) {
+    public PagedResponse<UserCardResponse> findallcardsbyuser(int page, int size,FindAllCardsByUserrequest findAllCardsByUserrequest) {
         validatePagenumberandSize(page, size);
 
-        User user=loginrepo.findById(1L).orElseThrow(() -> new UserNotFoundException("user not found"));
+        User user=loginrepo.findByUID(findAllCardsByUserrequest.getUid()).orElseThrow(() -> new UserNotFoundException("user not found"));
 
         try {
 
             Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "id");
             Page<UserCard> usercards = userCardRepo.findAllByUserrr(user,pageable);
-            log.info("usercards {}",usercards);
+//            log.info("usercards {}",usercards);
 
 
             if (usercards.getNumberOfElements() == 0) {
                 return new PagedResponse<>(Collections.emptyList(), usercards.getNumber(), usercards.getSize(), usercards.getTotalElements(), usercards.getTotalPages(), usercards.isLast());
             }
             List<UserCardResponse> usercardsresponses = usercards.map(ModelMapper::mapusercardstousercardsresponse).getContent();
-            log.info("logging usercardsresponses {}", usercardsresponses);
+//            log.info("logging usercardsresponses {}", usercardsresponses);
             return new PagedResponse<>(usercardsresponses, usercards.getNumber(), usercards.getSize(), usercards.getTotalElements(), usercards.getTotalPages(), usercards.isLast());
 
         }catch (Exception e){
@@ -365,7 +363,7 @@ public class CardService {
         if (cardfeeRequest.getCardid()==null || cardfeeRequest.getCardid().equals(0L)){
             return new Cardfeerequestresponse("invalid card id provided "+cardfeeRequest.getCardid());
         }
-        User user=loginrepo.findById(1L).orElseThrow(() -> new UserNotFoundException("user not found "));
+        User user=loginrepo.findByUID(cardfeeRequest.getUid()).orElseThrow(() -> new UserNotFoundException("user not found "));
         UserCard userCard=userCardRepo.findById(cardfeeRequest.getCardid()).orElseThrow(() -> new UserCardNotFoundException("user card not found"));
 
         try {
@@ -394,7 +392,7 @@ public class CardService {
         if (packfeeRequest.getPackid()==null || packfeeRequest.getPackid().equals(0L)){
             return new Packfeerequestresponse("invalid pack id provided "+packfeeRequest.getPackid());
         }
-        User user=loginrepo.findById(1L).orElseThrow(() -> new UserNotFoundException("user not found "));
+        User user=loginrepo.findByUID(1L).orElseThrow(() -> new UserNotFoundException("user not found "));
 
         try {
            Pack pack=packrepo.findById(packfeeRequest.getPackid()).orElseThrow(() ->  new PackNotFoundException("pack not found"));
@@ -430,7 +428,7 @@ public class CardService {
                 return new PagedResponse<>(Collections.emptyList(), usercards.getNumber(), usercards.getSize(), usercards.getTotalElements(), usercards.getTotalPages(), usercards.isLast());
             }
             List<CardFeeResponse> usercardsresponses = usercards.map(ModelMapper::mapcardfeetocardfeeresponse).getContent();
-            log.info("logging usercardsresponses {}", usercardsresponses);
+////            log.info("logging usercardsresponses {}", usercardsresponses);
             return new PagedResponse<>(usercardsresponses, usercards.getNumber(), usercards.getSize(), usercards.getTotalElements(), usercards.getTotalPages(), usercards.isLast());
 
         }catch (Exception e){
@@ -452,7 +450,7 @@ public class CardService {
                 return new PagedResponse<>(Collections.emptyList(), usercards.getNumber(), usercards.getSize(), usercards.getTotalElements(), usercards.getTotalPages(), usercards.isLast());
             }
             List<PackFeeResponse> usercardsresponses = usercards.map(ModelMapper::mapPackfeetopackfeeresponse).getContent();
-            log.info("logging usercardsresponses {}", usercardsresponses);
+//            log.info("logging usercardsresponses {}", usercardsresponses);
             return new PagedResponse<>(usercardsresponses, usercards.getNumber(), usercards.getSize(), usercards.getTotalElements(), usercards.getTotalPages(), usercards.isLast());
 
         }catch (Exception e){
@@ -548,7 +546,7 @@ public class CardService {
         AtomicReference<String> response= new AtomicReference<>("");
 
         try {
-            User user = loginrepo.findById(2L).orElseThrow(() -> new UserNotFoundException("User Not found exception "));
+            User user = loginrepo.findByUID(buyPackRequest.getUid()).orElseThrow(() -> new UserNotFoundException("User Not found exception "));
             Pack pack = packrepo.findById(buyPackRequest.getPackid()).orElseThrow(() -> new PackNotFoundException("pack not found"));
 
             Unopenedpack unopenedpack=unopenedpackrepo.findByPack(pack).orElseThrow(() -> new PackNotFoundException("pack not found"));

@@ -116,10 +116,10 @@ private final CardService cardService;
     @GetMapping("/getallusercards")
     public PagedResponse<UserCardResponse> getallcardsforauser(
             @RequestParam(value = "page",defaultValue =DEFAULT_PAGE_NUMBER) int page,
-            @RequestParam(value = "size",defaultValue = DEFAULT_PAGE_SIZE)  int size
+            @RequestParam(value = "size",defaultValue = DEFAULT_PAGE_SIZE)  int size,FindAllCardsByUserrequest findAllCardsByUserrequest
     ){
 //        return ResponseEntity.ok(cardService.findallcardsbyuser());
-        return cardService.findallcardsbyuser(page, size);
+        return cardService.findallcardsbyuser(page, size,findAllCardsByUserrequest);
     }
     @PostMapping("/setfeeforusercard")
     public ResponseEntity<?> setcardfeeforauser(@Valid @RequestBody CardfeeRequest cardfeeRequest){

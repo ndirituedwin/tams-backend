@@ -1,8 +1,10 @@
 package com.cardgame.Service.mapper;
 
 import com.cardgame.Dto.responses.CardFeeResponse;
+import com.cardgame.Dto.responses.GameRoomResponse;
 import com.cardgame.Dto.responses.PackFeeResponse;
 import com.cardgame.Dto.responses.UserCardResponse;
+import com.cardgame.Entity.GameRoom;
 import com.cardgame.Entity.PackPricelisting;
 import com.cardgame.Entity.UserCard;
 import com.cardgame.Entity.Usercardfee;
@@ -38,5 +40,14 @@ public class ModelMapper {
         userCardResponse.setPacktype(packPricelisting.getPack().getPacktype());
         return userCardResponse;
 
+    }
+
+    public static GameRoomResponse mapgameroomtogameroomresponse(GameRoom gameRoom) {
+        GameRoomResponse gameRoomResponse=new GameRoomResponse();
+        gameRoomResponse.setId(gameRoom.getId());
+        gameRoomResponse.setCreateddate(gameRoom.getCreateddate());
+        gameRoomResponse.setMinimumamount(gameRoom.getMinimumamount());
+        gameRoomResponse.setNumberofusers(gameRoom.getNumberofusers());
+        return gameRoomResponse;
     }
 }

@@ -14,6 +14,16 @@ public class Unopenedpackrequest {
     @NotNull(message = "open pack may no be null")
     private int openpack;
 
+    private Long uid;
+
+    public Long getUid() {
+        return uid;
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
+
     public int getOpenpack() {
         return openpack;
     }

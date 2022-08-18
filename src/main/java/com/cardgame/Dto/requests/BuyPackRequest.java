@@ -5,13 +5,15 @@ import java.math.BigDecimal;
 public class BuyPackRequest {
 
 private Long packid;
+private Long uid;
 private BigDecimal amount;
 private String orderid;
 private String paymentid;
 
 
-    public BuyPackRequest(Long packid, BigDecimal amount, String orderid, String paymentid) {
+    public BuyPackRequest(Long packid, Long uid, BigDecimal amount, String orderid, String paymentid) {
         this.packid = packid;
+        this.uid = uid;
         this.amount = amount;
         this.orderid = orderid;
         this.paymentid = paymentid;
@@ -47,5 +49,13 @@ private String paymentid;
 
     public void setPaymentid(String paymentid) {
         this.paymentid = paymentid;
+    }
+
+    public Long getUid() {
+        return uid;
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
     }
 }

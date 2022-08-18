@@ -12,7 +12,7 @@ public class Addmoneytowalletrequest {
     private String paymentid;
     @NotBlank(message = "order id may not be blank")
     private String orderid;
-
+    private Long uid;
     public BigDecimal getAmount() {
         return amount;
     }
@@ -37,5 +37,11 @@ public class Addmoneytowalletrequest {
         this.paymentid = paymentid;
     }
 
+    public Long getUid() {
+        return uid;
+    }
 
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
 }

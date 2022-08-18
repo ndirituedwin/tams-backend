@@ -66,6 +66,24 @@ public class UserCard {
         return cardduplicate;
     }
 
+
+    public Pack getPack() {
+        return pack;
+    }
+
+    public void setPack(Pack pack) {
+        this.pack = pack;
+    }
+
+    public boolean isOpenedcard() {
+        return openedcard;
+    }
+
+    public void setOpenedcard(boolean openedcard) {
+        this.openedcard = openedcard;
+    }
+
+
     public void setCardduplicate(Cardduplicate cardduplicate) {
         this.cardduplicate = cardduplicate;
     }

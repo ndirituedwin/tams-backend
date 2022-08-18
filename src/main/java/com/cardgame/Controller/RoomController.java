@@ -1,8 +1,9 @@
 package com.cardgame.Controller;
 
-import com.cardgame.Dto.requests.JoinRoomRequest;
-import com.cardgame.Dto.requests.Cardduplicaterequest;
-import com.cardgame.Dto.requests.Roomjoinrequest;
+import com.cardgame.Dto.requests.*;
+import com.cardgame.Dto.responses.GameRoomResponse;
+import com.cardgame.Dto.responses.PackFeeResponse;
+import com.cardgame.Dto.responses.Page.PagedResponse;
 import com.cardgame.Dto.responses.Userbestthirtycards;
 import com.cardgame.Service.RoomService;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,9 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.cardgame.config.ApiUtils.DEFAULT_PAGE_NUMBER;
+import static com.cardgame.config.ApiUtils.DEFAULT_PAGE_SIZE;
 
 @RestController
 @RequestMapping("/api/game-room")
@@ -41,14 +45,35 @@ public class RoomController {
         }
     }
     @PostMapping("/leave-room")
-    public ResponseEntity<?> leaveroom(){
-        return ResponseEntity.ok(roomService.leaveroom());
+    public ResponseEntity<?> leaveroom(@Valid @RequestBody LeaveRoomRequest leaveRoomRequest){
+        return ResponseEntity.ok(roomService.leaveroom(leaveRoomRequest));
     }
 
-    @GetMapping("/get/userbestcards")
-    public ResponseEntity<?> userbestthirtycards(){
+    @GetMapping("/get/userbestcards/{uid}")
+//    public ResponseEntity<?> userbestthirtycards(){
+    public Object userbestthirtycards(@PathVariable("uid") Long uid){
 
-        return ResponseEntity.ok(roomService.userbestthirtycards());
+//        return ResponseEntity.ok(roomService.userbestthirtycards());
+        return roomService.userbestthirtycards(uid);
+    }
+
+    @GetMapping("/gamerooms")
+    public PagedResponse<GameRoomResponse> gamerooms(@RequestParam(value = "page",defaultValue =DEFAULT_PAGE_NUMBER) int page,
+                                                     @RequestParam(value = "size",defaultValue = DEFAULT_PAGE_SIZE)  int size){
+
+        return roomService.gamerooms(page, size);
+
+    }
+    @PostMapping("/buy-in")
+    public ResponseEntity<?> buyin(@Valid @RequestBody Buyinrequest buyinrequest, BindingResult result){
+
+        return new ResponseEntity<>(roomService.buyin(buyinrequest), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/get-user-buy-in")
+    public ResponseEntity<?> getuserbuyin(@Valid @RequestBody UserBuyInRequest userBuyInRequest){
+
+        return ResponseEntity.ok(roomService.getuserbuyin(userBuyInRequest));
     }
 
 }

@@ -1,29 +1,22 @@
 package com.cardgame.Dto.requests;
 
-import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
-public class Roomjoinrequest {
+public class Buyinrequest {
 
 
-//    @NotBlank(message = "minimum amount may not be blank")
-    private String minimumamount;
     private Long userid;
     private BigDecimal amount;
     private Long gameroomid;
 
-
-    public String getMinimumamount() {
-        return minimumamount;
+    public Buyinrequest() {
     }
 
-    public void setMinimumamount(String minimumamount) {
-        this.minimumamount = minimumamount;
+    public Buyinrequest(Long userid, BigDecimal amount, Long gameroomid) {
+        this.userid = userid;
+        this.amount = amount;
+        this.gameroomid = gameroomid;
     }
-
-
 
     public Long getUserid() {
         return userid;

@@ -8,9 +8,6 @@ import javax.persistence.*;
 
 @Table(name = "userbest_cards")
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Userbestcard {
 
     @Id
@@ -22,6 +19,15 @@ public class Userbestcard {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    public Userbestcard() {
+    }
+
+    public Userbestcard(long id, Long userbestcard, User user) {
+        this.id = id;
+        this.userbestcard = userbestcard;
+        this.user = user;
+    }
 
     public long getId() {
         return id;

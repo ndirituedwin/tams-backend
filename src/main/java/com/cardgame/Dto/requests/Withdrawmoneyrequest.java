@@ -10,12 +10,16 @@ public class Withdrawmoneyrequest {
     private String paymentid;
     @NotBlank(message = "order id may not be blank")
     private String orderid;
-
+    private Long uid;
     public Withdrawmoneyrequest() {
     }
 
     public Withdrawmoneyrequest(BigDecimal withdrawamount) {
         this.withdrawamount = withdrawamount;
+    }
+
+    public Withdrawmoneyrequest(Long uid) {
+        this.uid = uid;
     }
 
     public BigDecimal getWithdrawamount() {
@@ -40,5 +44,13 @@ public class Withdrawmoneyrequest {
 
     public void setOrderid(String orderid) {
         this.orderid = orderid;
+    }
+
+    public Long getUid() {
+        return uid;
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
     }
 }

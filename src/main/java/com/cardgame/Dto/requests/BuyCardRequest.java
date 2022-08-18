@@ -15,13 +15,17 @@ public class BuyCardRequest {
     @NotBlank(message = "order id may not be blank")
     private String orderid;
 
+     private Long uid;
 
-    public BuyCardRequest(String cardid, BigDecimal amounttobuy, String paymentid, String orderid) {
-        this.cardid = cardid;
-        this.amounttobuy = amounttobuy;
-        this.paymentid = paymentid;
-        this.orderid = orderid;
+    public Long getUid() {
+        return uid;
     }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
+
+
 
     public String getCardid() {
         return cardid;

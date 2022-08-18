@@ -5,10 +5,23 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 @Builder
 public class SelectPackRequestResponse {
 
 private String message;
 
+    public SelectPackRequestResponse(String message) {
+        this.message = message;
+    }
+
+    public SelectPackRequestResponse() {
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

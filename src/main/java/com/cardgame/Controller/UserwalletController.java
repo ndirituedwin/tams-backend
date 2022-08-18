@@ -2,6 +2,7 @@ package com.cardgame.Controller;
 
 
 import com.cardgame.Dto.requests.Addmoneytowalletrequest;
+import com.cardgame.Dto.requests.Getwalletbaancerequest;
 import com.cardgame.Dto.requests.Withdrawmoneyrequest;
 import com.cardgame.Service.UserwalletService;
 import org.hibernate.boot.jaxb.spi.Binding;
@@ -39,8 +40,8 @@ private final UserwalletService userwalletService;
     }
 
     @GetMapping("/get-user-total-wallet-balance")
-    public ResponseEntity<?> getuserwalletbalance(){
-        return ResponseEntity.ok(userwalletService.getwalletservice());
+    public ResponseEntity<?> getuserwalletbalance(Getwalletbaancerequest getwalletbaancerequest){
+        return ResponseEntity.ok(userwalletService.getwalletservice(getwalletbaancerequest));
     }
 
     @PostMapping("/withdraw")

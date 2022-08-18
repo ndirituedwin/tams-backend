@@ -10,6 +10,15 @@ public class Selectpackrequest {
 
     @NotBlank(message = "select pack")
     private String packid;
+    private Long uid;
+
+    public Long getUid() {
+        return uid;
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
 
     public String getPackid() {
         return packid;

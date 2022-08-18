@@ -13,5 +13,27 @@ public class Cardbyratioduplicaterequest {
     @NotBlank(message = "ratio")
     private String ratio;
 
+    public Cardbyratioduplicaterequest() {
+    }
 
+    public Cardbyratioduplicaterequest(String cardid, String ratio) {
+        this.cardid = cardid;
+        this.ratio = ratio;
+    }
+
+    public String getCardid() {
+        return cardid;
+    }
+
+    public void setCardid(String cardid) {
+        this.cardid = cardid;
+    }
+
+    public String getRatio() {
+        return ratio;
+    }
+
+    public void setRatio(String ratio) {
+        this.ratio = ratio;
+    }
 }
