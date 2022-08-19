@@ -271,6 +271,9 @@ public class CardService {
             Usercardfee usercardfee = usercardfeerepo.findByUserCard(userCard).orElseThrow(() -> new CardNotFoundException("The card fee has not been set for the given user card"));
             boolean usercardexistsbyusserandcard=usercardfeerepo.existsByUserAndUserCard(user,userCard);
 
+            if (!userCard.isOpenedcard()){
+                return new Buycardresponse("the card is not opened");
+            }
             if (usercardexistsbyusserandcard){
                 return new Buycardresponse("you cannot buy same card twice");
             }
