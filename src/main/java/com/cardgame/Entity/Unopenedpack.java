@@ -6,7 +6,7 @@ import org.hibernate.annotations.Fetch;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "unopened_packs")
+@Table(name = "purchased_packs")
 public class Unopenedpack {
 
     @Id

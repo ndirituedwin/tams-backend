@@ -1,10 +1,9 @@
 package com.cardgame.Controller;
 
 import com.cardgame.Dto.requests.*;
+
 import com.cardgame.Dto.responses.GameRoomResponse;
-import com.cardgame.Dto.responses.PackFeeResponse;
 import com.cardgame.Dto.responses.Page.PagedResponse;
-import com.cardgame.Dto.responses.Userbestthirtycards;
 import com.cardgame.Service.RoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.cardgame.config.ApiUtils.DEFAULT_PAGE_NUMBER;
 import static com.cardgame.config.ApiUtils.DEFAULT_PAGE_SIZE;
+
 
 @RestController
 @RequestMapping("/api/game-room")
@@ -32,6 +31,16 @@ public class RoomController {
 
 
 
+
+
+
+    @PostMapping("/create")
+    public ResponseEntity<?> creategameroom(@Valid @RequestBody Creategameroomrequest creategameroomrequest, BindingResult result){
+
+            return new ResponseEntity<>(roomService.creategameroom(creategameroomrequest), HttpStatus.CREATED);
+
+    }
+
     @PostMapping("/join")
     public ResponseEntity<?> jointhegameroom(@Valid @RequestBody Roomjoinrequest roomjoinrequest, BindingResult result){
         if (result.hasErrors()){
@@ -41,7 +50,7 @@ public class RoomController {
             }
             return new ResponseEntity<Map<String,String>>(errorMap, HttpStatus.BAD_REQUEST);
         }else{
-            return new ResponseEntity<>(roomService.joinRoom1(roomjoinrequest), HttpStatus.CREATED);
+            return new ResponseEntity<>(roomService.joinRoom(roomjoinrequest), HttpStatus.CREATED);
         }
     }
     @PostMapping("/leave-room")

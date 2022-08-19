@@ -1,5 +1,6 @@
 package com.cardgame.Repo;
 
+import com.cardgame.Entity.User;
 import com.cardgame.Entity.UserCard;
 import com.cardgame.Entity.Usercardfee;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,6 @@ import java.util.OptionalInt;
 @Repository
 public interface Usercardfeerepo extends JpaRepository<Usercardfee,Long> {
     Optional<Usercardfee> findByUserCard(UserCard userCard);
+
+    boolean existsByUserAndUserCard(User user, UserCard userCard);
 }

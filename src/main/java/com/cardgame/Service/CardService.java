@@ -131,6 +131,7 @@ public class CardService {
 
     }
 
+//    @Transactional
     public SelectPackRequestResponse usercards(Selectpackrequest selectpackrequest) {
 
 //        int pack=Integer.parseInt(selectpackrequest.getPackid());
@@ -138,20 +139,34 @@ public class CardService {
         int pack=(int)pack1.getNumberofcards();
 
         List<Cardduplicate> cardduplicates=cardduplicaterepo.findAllByIsTakenEquals(false);
-////        log.info("the cards {}",cardduplicates.size());
+        log.info("the cards {} {}",cardduplicates.size());
         User user=loginrepo.findByUID(selectpackrequest.getUid()).orElseThrow(() -> new UserNotFoundException("user with the given id could not be found "));
-
-        Collections.shuffle(cardduplicates);
+     if (cardduplicates.isEmpty()){
+         return new SelectPackRequestResponse("you need to first duplicate the cards");
+     }
 
         try {
-            for(int j=0; j<pack; j++){
-                userCardRepo.save(new UserCard(user,cardduplicates.get(j),pack1,false));
-                Cardduplicate cardduplicate= new Cardduplicate();
-                cardduplicate.setId(cardduplicates.get(j).getId());
-                cardduplicate.setCard(cardduplicates.get(j).getCard());
-                cardduplicate.setTaken(true);
+            for(int j=0; j<pack; j++) {
+                    log.info("ffff {}",cardduplicates.size());
+//                    if (cardduplicates.size()==1){
+//                        break;
+//                    }
+                    userCardRepo.save(new UserCard(user, cardduplicates.get(j), pack1, selectpackrequest.getOpenpack() == 1));
+                    Cardduplicate cardduplicate = new Cardduplicate();
+                    cardduplicate.setId(cardduplicates.get(j).getId());
+                    cardduplicate.setCard(cardduplicates.get(j).getCard());
+                    cardduplicate.setTaken(selectpackrequest.getOpenpack() == 1);
+//                cardduplicates.remove(cardduplicates.get(j));
                 cardduplicaterepo.save(cardduplicate);
+
+                    log.info("reached here {}");
+
             }
+            Unopenedpack unopenedpack=new Unopenedpack();
+            unopenedpack.setUser(user);
+            unopenedpack.setPack(pack1);
+            unopenedpack.setIsopen(selectpackrequest.getOpenpack()==1);
+            unopenedpackrepo.save(unopenedpack);
             return new SelectPackRequestResponse("user cards saved for pack "+selectpackrequest.getPackid());
 
         }catch (Exception e){
@@ -231,30 +246,7 @@ public class CardService {
 
                 });
                 return new UnopenedPackRequestResponse("pack opened "+selectpackrequest.getPackid());
-                }else if (selectpackrequest.getOpenpack()==0){
-                boolean unopenedpackexist=unopenedpackrepo.existsByPack(pack1);
-                if (unopenedpackexist){
-                    return new UnopenedPackRequestResponse("the pack already exists");
-                }
-                Unopenedpack unopenedpack=new Unopenedpack();
-                 unopenedpack.setIsopen(false);
-                 unopenedpack.setPack(pack1);
-                 unopenedpack.setUser(user);
-                unopenedpackrepo.save(unopenedpack);
-
-                List<Cardduplicate> cardduplicates=cardduplicaterepo.findAllByIsTakenEquals(false);
-                Collections.shuffle(cardduplicates);
-
-                for(int j=0; j<pack; j++){
-                    userCardRepo.save(new UserCard(user,cardduplicates.get(j),pack1,false));
-                    Cardduplicate cardduplicate= new Cardduplicate();
-                    cardduplicate.setId(cardduplicates.get(j).getId());
-                    cardduplicate.setCard(cardduplicates.get(j).getCard());
-                    cardduplicate.setTaken(true);
-                    cardduplicaterepo.save(cardduplicate);
-                }
-                return new UnopenedPackRequestResponse("unopened pack created "+selectpackrequest.getPackid());
-            }else{
+                   }else{
                 return new UnopenedPackRequestResponse("invalid open pack value provided");
 
             }
@@ -273,11 +265,19 @@ public class CardService {
         if (buyCardRequest.getAmounttobuy().compareTo(BigDecimal.ZERO)<1){
             return new Buycardresponse("Invalid buy amount entered");
         }
-        User user=loginrepo.findByUID(buyCardRequest.getUid()).orElseThrow(() -> new UserNotFoundException("user not found"));
         try {
+            User user=loginrepo.findByUID(buyCardRequest.getUid()).orElseThrow(() -> new UserNotFoundException("user not found"));
             UserCard userCard = userCardRepo.findById(Long.parseLong(buyCardRequest.getCardid())).orElseThrow(() -> new UserCardNotFoundException("The card could not be found"));
             Usercardfee usercardfee = usercardfeerepo.findByUserCard(userCard).orElseThrow(() -> new CardNotFoundException("The card fee has not been set for the given user card"));
-            if (usercardfee.getStatus().equalsIgnoreCase("ACTIVE")) {
+            boolean usercardexistsbyusserandcard=usercardfeerepo.existsByUserAndUserCard(user,userCard);
+
+            if (usercardexistsbyusserandcard){
+                return new Buycardresponse("you cannot buy same card twice");
+            }
+            if (usercardfee.getFeeamount().compareTo(buyCardRequest.getAmounttobuy())==-1){
+
+
+            if (usercardfee.getStatus().equalsIgnoreCase(ACTIVE)) {
 
             Long orginalcarduser = userCard.getUser().getId();
             userCard.setUser(user);
@@ -324,6 +324,9 @@ public class CardService {
         }else{
                 return new Buycardresponse("The card fee is inactive or already sold");
             }
+        }else{
+            return new Buycardresponse("The amount you have entered to buy the card is less than the card fee ");
+        }
         }catch (Exception e){
             return new Buycardresponse("An exception has occurred while buying the card "+e.getMessage());
         }
@@ -333,9 +336,10 @@ public class CardService {
     public PagedResponse<UserCardResponse> findallcardsbyuser(int page, int size,FindAllCardsByUserrequest findAllCardsByUserrequest) {
         validatePagenumberandSize(page, size);
 
-        User user=loginrepo.findByUID(findAllCardsByUserrequest.getUid()).orElseThrow(() -> new UserNotFoundException("user not found"));
 
         try {
+            log.info("user id {}",findAllCardsByUserrequest.getUid());
+            User user=loginrepo.findByUID(findAllCardsByUserrequest.getUid()).orElseThrow(() -> new UserNotFoundException("user not found"));
 
             Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "id");
             Page<UserCard> usercards = userCardRepo.findAllByUserrr(user,pageable);
@@ -363,10 +367,10 @@ public class CardService {
         if (cardfeeRequest.getCardid()==null || cardfeeRequest.getCardid().equals(0L)){
             return new Cardfeerequestresponse("invalid card id provided "+cardfeeRequest.getCardid());
         }
-        User user=loginrepo.findByUID(cardfeeRequest.getUid()).orElseThrow(() -> new UserNotFoundException("user not found "));
-        UserCard userCard=userCardRepo.findById(cardfeeRequest.getCardid()).orElseThrow(() -> new UserCardNotFoundException("user card not found"));
 
         try {
+            User user=loginrepo.findByUID(cardfeeRequest.getUid()).orElseThrow(() -> new UserNotFoundException("user not found "));
+            UserCard userCard=userCardRepo.findById(cardfeeRequest.getCardid()).orElseThrow(() -> new UserCardNotFoundException("user card not found"));
 
             Usercardfee usercardfee=new Usercardfee();
             usercardfee.setUserCard(userCard);

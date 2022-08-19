@@ -116,7 +116,7 @@ private final CardService cardService;
     @GetMapping("/getallusercards")
     public PagedResponse<UserCardResponse> getallcardsforauser(
             @RequestParam(value = "page",defaultValue =DEFAULT_PAGE_NUMBER) int page,
-            @RequestParam(value = "size",defaultValue = DEFAULT_PAGE_SIZE)  int size,FindAllCardsByUserrequest findAllCardsByUserrequest
+            @RequestParam(value = "size",defaultValue = DEFAULT_PAGE_SIZE)  int size,@Valid @RequestBody FindAllCardsByUserrequest findAllCardsByUserrequest
     ){
 //        return ResponseEntity.ok(cardService.findallcardsbyuser());
         return cardService.findallcardsbyuser(page, size,findAllCardsByUserrequest);

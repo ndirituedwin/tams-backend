@@ -8,9 +8,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "card_duplicates")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
 public class Cardduplicate {
 
     @Id
@@ -20,6 +20,15 @@ public class Cardduplicate {
     private Card card;
 
     private boolean isTaken=false;
+
+    public Cardduplicate() {
+    }
+
+    public Cardduplicate(long id, Card card, boolean isTaken) {
+        this.id = id;
+        this.card = card;
+        this.isTaken = isTaken;
+    }
 
     public Cardduplicate(Card card) {
         this.card = card;
