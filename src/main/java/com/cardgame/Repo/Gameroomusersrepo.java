@@ -16,5 +16,5 @@ public interface Gameroomusersrepo extends JpaRepository<Gameroomusers,Long> {
 
     void deleteByUseridAndGameRoom(long uid, GameRoom gameRoom);
 
-    boolean existsByUseridAndGameRoom(User user, GameRoom gameRoom);
+    boolean existsByUseridAndGameRoom(long uid, GameRoom gameRoom);
 }

@@ -151,7 +151,9 @@ public ResponseEntity<?> joinRoom1(Roomjoinrequest roomjoinrequest){
 
    @Transactional
     public ResponseEntity<?> joinRoom(Roomjoinrequest roomjoinrequest){
-
+       if (roomjoinrequest.getGameroomid() == null || roomjoinrequest.getAmount() == null|| roomjoinrequest.getUserid()==null) {
+           return ResponseEntity.ok("one of the values of the request body is null");
+       }
 
         try {
 
@@ -163,11 +165,9 @@ public ResponseEntity<?> joinRoom1(Roomjoinrequest roomjoinrequest){
 //            getting user wallet balance
             Userwallet userwallet=userwalletrepo.findByUserid(user.getUID()).orElseThrow(() -> new UserWalletNotFoundException("user wallet nt found"));
 //            check if the walet balance is greater than wamount user wants to deposit.
-            if (roomjoinrequest.getAmount().compareTo(userwallet.getTotalwalletbalance())==-1) {
-//              update game room status
-                gameRoom.setStatus(true);
-                gameRoom.setNumberofusers(gameRoom.getNumberofusers() + 1);
-                gameRoomrepo.save(gameRoom);
+            if (roomjoinrequest.getAmount().compareTo(userwallet.getTotalwalletbalance()) < 0) {
+                if (roomjoinrequest.getAmount().compareTo(gameRoom.getMinimumamount()) > 0){
+
                 List<GameRoom> gameroomList1 = gameRoomrepo.findAll();
                 GameRoom agam = gameroomList1.stream()
 //                       .peek(gameRoom -> log.info("gameroom{} {} {} {}",gameRoom.getCreateddate(),gameRoom.getId(),gameRoom.getNumberofusers(),gameRoom.getMinimumamount()))
@@ -179,35 +179,27 @@ public ResponseEntity<?> joinRoom1(Roomjoinrequest roomjoinrequest){
                     return ResponseEntity.ok("All game rooms are full!!");
                 } else {
                     //              check game room users if there is a user with same game room and same user id
-                    boolean existsByUseridAndGameRoom = gameroomusersrepo.existsByUseridAndGameRoom(user, gameRoom);
+                    boolean existsByUseridAndGameRoom = gameroomusersrepo.existsByUseridAndGameRoom(user.getUID(), gameRoom);
                     if (existsByUseridAndGameRoom) {
                     return ResponseEntity.ok("You cannot join the game room twice ");
                     } else {
-
 //                     if game room user does not existwith same user id and game room
                     Gameroomusers gameroomusers = new Gameroomusers();
                     gameroomusers.setUserid(user.getUID());
                     gameroomusers.setGameRoom(agam);
                     Long useridd = gameroomusersrepo.save(gameroomusers).getUserid();
                     agam.setNumberofusers(agam.getNumberofusers() + 1);
-                    Integer nou = gameRoomrepo.save(agam).getNumberofusers();
+                    agam.setStatus(true);
+                    gameRoomrepo.save(agam);
 
-
-                    try {
-//                       log.info("goes through here {}",roomjoinrequest);
-
-                        if (roomjoinrequest.getGameroomid() == null || roomjoinrequest.getAmount() == null) {
-                           return ResponseEntity.ok("one of the values of the request body is null");
-                        }
-//                        User user_not_foun = loginrepo.findByUID(useridd).orElseThrow(() -> new UserNotFoundException("user not foun"));
-                        GameRoom room = gameRoomrepo.findById(agam.getId()).orElseThrow(() -> new GameNotFoundException("Game room not found"));
-                        boolean existsbyuseridandgameroomid = buyinrepo.existsByUserAndGameRoom(user, room);
+//                    GameRoom room = gameRoomrepo.findById(agam.getId()).orElseThrow(() -> new GameNotFoundException("Game room not found"));
+                        boolean existsbyuseridandgameroomid = buyinrepo.existsByUserAndGameRoom(user, agam);
                         if (existsbyuseridandgameroomid) {
                             System.out.println("Buy in exists buy the user and game room ");
 //                           return new BUyinresponse("buy in exists buy the user and game room ");
                         }
                         BuyIn buyIn = new BuyIn();
-                        buyIn.setGameRoom(room);
+                        buyIn.setGameRoom(agam);
                         buyIn.setUser(user);
                         buyIn.setCreatedDate(Instant.now());
                         buyIn.setAmount(roomjoinrequest.getAmount());
@@ -216,21 +208,20 @@ public ResponseEntity<?> joinRoom1(Roomjoinrequest roomjoinrequest){
                         userwalletrepo.save(userwallet);
                           System.out.println("BUy in of amount " + roomjoinrequest.getAmount() + " and for the user " + user.getUsername() + " saved successfully!");
 //                       return new BUyinresponse("BUy in of amount "+buyinrequest.getAmount()+" and for the user "+user.getUsername()+" saved successfully!");
-                    } catch (Exception e) {
-                        return ResponseEntity.ok("An exception has occurred while saving buyin " + e.getMessage());
 
-//                       return new BUyinresponse("An exception has occurred while saving buyin "+e.getMessage());
-                    }
 
                 }
             }
 
+            }else{
+                return ResponseEntity.ok("the amount you entered is less than the minimum amount for the game room : the game room minimum amoun for the game room is: "+gameRoom.getMinimumamount());
+            }
 
             }else{
                 return ResponseEntity.ok("You do not have enough money on your wallet to join the game room, your balance is: "+userwallet.getTotalwalletbalance());
             }
-//           return new JoinRoomResponse("game room saven");
-            return ResponseEntity.ok(this.userbestthirtycards(roomjoinrequest.getUserid()));
+           return ResponseEntity.ok("game room saved");
+//            return ResponseEntity.ok(this.userbestthirtycards(roomjoinrequest.getUserid()));
 
 
         }catch (Exception e){
