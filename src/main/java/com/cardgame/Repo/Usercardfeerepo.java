@@ -46,4 +46,6 @@ public interface Usercardfeerepo extends JpaRepository<Usercardfee,Long> {
     List<Usercardfee> findAllByUserCardAndStatus(UserCard userCard, String active);
 
     List<Usercardfee> findAllByUserCard(UserCard userCard);
+
+    boolean existsByUserAndUserCardAndStatus(User user, UserCard userCard, String active);
 }

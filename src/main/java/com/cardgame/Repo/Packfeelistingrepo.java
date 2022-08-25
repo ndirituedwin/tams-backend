@@ -3,6 +3,7 @@ package com.cardgame.Repo;
 import com.cardgame.Entity.PackPricelisting;
 import com.cardgame.Entity.Unopenedpack;
 import com.cardgame.Entity.User;
+import com.cardgame.Entity.UserCard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -19,4 +20,5 @@ public interface Packfeelistingrepo extends JpaRepository<PackPricelisting,Long>
     boolean existsByUnopenedpackAndStatus(Unopenedpack unopenedpack, String active);
 
     Optional<PackPricelisting> findByUnopenedpackAndStatus(Unopenedpack unopenedpack, String active);
+
 }

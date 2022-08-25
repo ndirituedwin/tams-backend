@@ -111,7 +111,7 @@ private final CardService cardService;
             }
             return new ResponseEntity<Map<String,String>>(errorMap, HttpStatus.BAD_REQUEST);
         }else{
-            return new ResponseEntity<>(cardService.buycard(buyCardRequest),HttpStatus.OK);
+            return new ResponseEntity<>(cardService.buycardone(buyCardRequest),HttpStatus.OK);
         }
     }
     @GetMapping("/getallusercards")

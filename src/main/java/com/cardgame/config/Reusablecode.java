@@ -592,3 +592,109 @@ public Buycardresponse buycard(BuyCardRequest buyCardRequest) {
 
       /**  }
 */
+
+
+//import javax.transaction.Transactional;
+//
+//@Transactional
+//public Buycardresponse buycard(BuyCardRequest buyCardRequest) {
+//
+//        try {
+////            check if user is logged in
+//        User user=userrepo.findById(buyCardRequest.getUid()).orElseThrow(() -> new UserNotFoundException("User not found"));
+//        Userwallet userwallet=userwalletrepo.findByUserid(user.getUID()).orElseThrow(() -> new UserWalletNotFoundException("Your user wallet could not be found"));
+//        UserCard userCard=userCardRepo.findById(Long.parseLong(buyCardRequest.getCardid())).orElseThrow(() -> new UserCardNotFoundException("User card could not be found"));
+//        List<Usercardfee> usercardfees=usercardfeerepo.findAllByUserCardAndStatus(userCard,ACTIVE);
+//
+//        AtomicReference<String> message= new AtomicReference<>("");
+//
+//        usercardfees.forEach(usercardfee ->{
+//        BigDecimal originalcardfeeamount=usercardfee.getFeeamount();
+//        if (userwallet.getTotalwalletbalance().compareTo(usercardfee.getFeeamount()) > 0){
+//        if (!userCard.isOpenedcard()){
+//        message.set("the card is not opened");
+//        }
+//        if (buyCardRequest.getUid()==userCard.getUser().getUID()){
+//        message.set("You cannot sell your own cards");
+//        }
+//
+//
+//        if (usercardfee.getStatus().equalsIgnoreCase(ACTIVE)) {
+//        System.out.println("reaching here ");
+//        Long orginalcarduser = userCard.getUser().getUID();
+//        userCard.setUser(user);
+//        Long newuserid = userCardRepo.save(userCard).getUser().getUID();
+////            after changing th user update the Carduserchange table
+//        Carduserchangetracking carduserchangetracking = new Carduserchangetracking();
+//        carduserchangetracking.setAmountbought(usercardfee.getFeeamount());
+//        carduserchangetracking.setOriginaluser(orginalcarduser);
+//        carduserchangetracking.setNewuser(newuserid);
+//        carduserchangetracking.setCreatedat(Instant.now());
+//        carduserchangetrackingrepo.save(carduserchangetracking);
+//        usercardfee.setStatus(CARD_SOLD);
+////                    usercardfee.setUser(user);
+//        usercardfeerepo.save(usercardfee);
+//
+////            now add the money to the original user wallet
+//        boolean userexistsinuserwallet = userwalletrepo.existsByUserid(orginalcarduser);
+//        if (userexistsinuserwallet) {
+//        Userwallet userwallet2 = userwalletrepo.findByUserid(orginalcarduser).orElseThrow(() -> new UserWalletNotFoundException("user wallet not found"));
+//        BigDecimal originalbaance = userwallet2.getTotalwalletbalance();
+//        BigDecimal newalbaance = originalbaance.add(originalcardfeeamount);
+//        userwallet2.setTotalwalletbalance(newalbaance);
+////                        userwallet2.setUserid(user.getUID());
+//        Userwallet userwallet1 = userwalletrepo.save(userwallet2);
+//        userwallet.setTotalwalletbalance(userwallet.getTotalwalletbalance().subtract(usercardfee.getFeeamount()));
+//        userwalletrepo.save(userwallet);
+//        //                now update the deposits table
+//        Userdeposit userdeposit = new Userdeposit();
+//        userdeposit.setUserwallet(userwallet1);
+//        userdeposit.setUserid(user.getUID());
+//        userdeposit.setAmountadded(originalcardfeeamount);
+//        userdeposit.setOrderid(buyCardRequest.getOrderid());
+//        userdeposit.setPaymentid(buyCardRequest.getPaymentid());
+//        userdepositrepo.save(userdeposit);
+////                now update user wallet changes table
+//        Changingwalletbalance changingwalletbalance = new Changingwalletbalance();
+//        changingwalletbalance.setPreviousbalance(originalbaance);
+//        changingwalletbalance.setNewbalance(userwallet1.getTotalwalletbalance());
+//        changingwalletbalance.setAction(BOUGHT_CARD);
+//        changingwalletbalance.setUserid(user.getUID());
+//        changingwalletbalance.setUserwallet(userwallet1);
+//        changingwalletbalancerepo.save(changingwalletbalance);
+//
+//
+//        //                now update user wallet changes table
+//        Changingwalletbalance changingwalletbalance11 = new Changingwalletbalance();
+//        changingwalletbalance11.setPreviousbalance(originalbaance);
+//        changingwalletbalance11.setNewbalance(newalbaance);
+//        changingwalletbalance11.setAction(CARD_SOLD);
+//        changingwalletbalance11.setUserid(orginalcarduser);
+//        changingwalletbalance11.setUserwallet(userwallet2);
+//        changingwalletbalancerepo.save(changingwalletbalance11);
+//
+//        message.set("You have successfully bought the card for " + originalcardfeeamount);
+//        } else {
+//        message.set("The user you are buying from does not exist");
+//        }
+//        }else{
+//        message.set("The card fee is inactive or already sold");
+//        }
+//
+//
+//
+//
+//        }else{
+//        message.set("insufficient wallet");
+//
+//        }
+//        });
+//
+//        return new  Buycardresponse(message.get());
+//
+//        }catch (Exception e){
+//        return new Buycardresponse("An exception has occurred whilebuying card "+e.getMessage());
+//        }
+//
+//        }
+//
