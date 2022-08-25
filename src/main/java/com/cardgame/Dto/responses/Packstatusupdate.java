@@ -3,6 +3,16 @@ package com.cardgame.Dto.responses;
 public class Packstatusupdate {
     private Long packid;
     private String status;
+    private Long uid;
+
+    public Long getUid() {
+        return uid;
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
+
     public Packstatusupdate() {
     }
 

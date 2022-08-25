@@ -8,21 +8,9 @@ import java.math.BigDecimal;
 public class Roomjoinrequest {
 
 
-//    @NotBlank(message = "minimum amount may not be blank")
-    private String minimumamount;
+
     private Long userid;
-    private BigDecimal amount;
-    private Long gameroomid;
-
-
-    public String getMinimumamount() {
-        return minimumamount;
-    }
-
-    public void setMinimumamount(String minimumamount) {
-        this.minimumamount = minimumamount;
-    }
-
+    private Long mastertableid;
 
 
     public Long getUserid() {
@@ -33,19 +21,12 @@ public class Roomjoinrequest {
         this.userid = userid;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public Long getMastertableid() {
+        return mastertableid;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setMastertableid(Long mastertableid) {
+        this.mastertableid = mastertableid;
     }
 
-    public Long getGameroomid() {
-        return gameroomid;
-    }
-
-    public void setGameroomid(Long gameroomid) {
-        this.gameroomid = gameroomid;
-    }
 }

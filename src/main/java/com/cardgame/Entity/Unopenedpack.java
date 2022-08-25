@@ -17,6 +17,7 @@ public class Unopenedpack {
     private Pack pack;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(referencedColumnName = "UID")
     private User user;
 
     @Column(name = "is_open")
@@ -29,6 +30,14 @@ public class Unopenedpack {
         this.pack = pack;
         this.user = user;
         this.isopen = isopen;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Pack getPack() {

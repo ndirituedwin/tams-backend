@@ -6,15 +6,14 @@ public class BuyPackRequest {
 
 private Long packid;
 private Long uid;
-private BigDecimal amount;
+//private BigDecimal amount;
 private String orderid;
 private String paymentid;
 
 
-    public BuyPackRequest(Long packid, Long uid, BigDecimal amount, String orderid, String paymentid) {
+    public BuyPackRequest(Long packid, Long uid, String orderid, String paymentid) {
         this.packid = packid;
         this.uid = uid;
-        this.amount = amount;
         this.orderid = orderid;
         this.paymentid = paymentid;
     }
@@ -27,13 +26,7 @@ private String paymentid;
         this.packid = packid;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
 
     public String getOrderid() {
         return orderid;

@@ -6,6 +6,7 @@ public class BoughtpackStatusRequest {
 
     private String cardStatus;
     private Long cardid;
+    private Long uid;
 
     public BoughtpackStatusRequest(String cardStatus, Long cardid) {
         this.cardStatus = cardStatus;

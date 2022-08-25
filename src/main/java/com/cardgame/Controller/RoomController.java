@@ -7,6 +7,8 @@ import com.cardgame.Dto.responses.Page.PagedResponse;
 import com.cardgame.Service.RoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import static com.cardgame.config.ApiUtils.DEFAULT_PAGE_SIZE;
 
 @RestController
 @RequestMapping("/api/game-room")
+//@RequestMapping("/game")
 public class RoomController {
 
   private final RoomService roomService;
@@ -28,6 +31,7 @@ public class RoomController {
     public RoomController(RoomService roomService) {
         this.roomService = roomService;
     }
+
 
 
 
@@ -58,13 +62,21 @@ public class RoomController {
         return ResponseEntity.ok(roomService.leaveroom(leaveRoomRequest));
     }
 
-    @GetMapping("/get/userbestcards/{uid}")
+    @PostMapping("/get/userbestcards")
 //    public ResponseEntity<?> userbestthirtycards(){
-    public Object userbestthirtycards(@PathVariable("uid") Long uid){
+    public Object userbestthirtycards(@Valid @RequestBody GetUserBest30cardsrequest getUserBest30cardsrequest){
 
 //        return ResponseEntity.ok(roomService.userbestthirtycards());
-        return roomService.userbestthirtycards(uid);
+        return roomService.userbestthirtycards(getUserBest30cardsrequest);
     }
+    @PostMapping("/get/alluserbest30cards")
+    public Object allusersbest30cards(){
+        return roomService.allusersbestthirtycards();
+    }
+//    @PostMapping("/get/best30cardsforeveryuserinthegameroom")
+//    public Object gameroomsersbest30cards(){
+//        return roomService.gameroomsersbest30cards();
+//    }
 
     @GetMapping("/gamerooms")
     public PagedResponse<GameRoomResponse> gamerooms(@RequestParam(value = "page",defaultValue =DEFAULT_PAGE_NUMBER) int page,
@@ -73,11 +85,7 @@ public class RoomController {
         return roomService.gamerooms(page, size);
 
     }
-    @PostMapping("/buy-in")
-    public ResponseEntity<?> buyin(@Valid @RequestBody Buyinrequest buyinrequest, BindingResult result){
 
-        return new ResponseEntity<>(roomService.buyin(buyinrequest), HttpStatus.CREATED);
-    }
 
     @GetMapping("/get-user-buy-in")
     public ResponseEntity<?> getuserbuyin(@Valid @RequestBody UserBuyInRequest userBuyInRequest){

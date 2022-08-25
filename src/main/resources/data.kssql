@@ -1,0 +1,30 @@
+INSERT INTO user_table(uid,username) VALUES(101,'oneoone');
+INSERT INTO user_table(uid,username) VALUES(72,'seventytwo');
+INSERT INTO user_table(uid,username) VALUES(31,'three');
+INSERT INTO user_table(uid,username) VALUES(48,'four');
+INSERT INTO user_table(uid,username) VALUES(58,'five');
+INSERT INTO user_table(uid,username) VALUES(61,'six');
+INSERT INTO user_table(uid,username) VALUES(71,'seven');
+INSERT INTO user_table(uid,username) VALUES(88,'eight');
+INSERT INTO user_table(uid,username) VALUES(99,'nine');
+INSERT INTO user_table(uid,username) VALUES(102,'ten');
+INSERT INTO user_table(uid,username) VALUES(112,'eleven');
+INSERT INTO user_table(uid,username) VALUES(123,'twelve');
+INSERT INTO user_table(uid,username) VALUES(137,'thirteen');
+INSERT INTO user_table(uid,username) VALUES(140,'fourteen');
+INSERT INTO user_table(uid,username) VALUES(158,'fifteen');
+INSERT INTO user_table(uid,username) VALUES(165,'sixteen');
+INSERT INTO user_table(uid,username) VALUES(175,'seventeen');
+INSERT INTO user_table(uid,username) VALUES(188,'eighteen');
+INSERT INTO user_table(uid,username) VALUES(199,'nineteen');
+INSERT INTO user_table(uid,username) VALUES(237,'twenty');
+
+
+INSERT INTO pack_table(pack_name,pack_type,number_of_cards) VALUES('packone','packtypeone',5);
+INSERT INTO pack_table(pack_name,pack_type,number_of_cards) VALUES('packtwo','packtypetwo',7);
+INSERT INTO pack_table(pack_name,pack_type,number_of_cards) VALUES('packthree','packtypethree',10);
+
+INSERT INTO card(name,link) VALUES('Gold','https://www.freelancer.com/users/l.php?url=https:%2F%2Fs3.us-east-2.amazonaws.com%2Fwww.swasth.tech%2Fcards%2FIMG-20220709-WA0003.jp&sig=2b87deffcaac72eecf98c7e79ae34f2f2ac45b33a55eaf51c4f4ba76da98096a');
+INSERT INTO card(name,link) VALUES('Silver','https://www.freelancer.com/users/l.php?url=https:%2F%2Fs3.us-east-2.amazonaws.com%2Fwww.swasth.tech%2Fcards%2FIMG-20220709-WA0001.jpg&sig=1a82a639c0d6ad7f704a4e230ef01d482313d214ec3349d53d66cc32d20b600f');
+INSERT INTO card(name,link) VALUES('Bronze','https://www.freelancer.com/users/l.php?url=https:%2F%2Fs3.us-east-2.amazonaws.com%2Fwww.swasth.tech%2Fcards%2FIMG-20220709-WA0000.jpg&sig=716b883167976990d2dba68ba4f44025b2272d59832d152685d43e2ad0e06a83');
+

@@ -15,23 +15,29 @@ public class BuyIn {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+//            name = "UID",
+            referencedColumnName = "UID"
+    )
     private User user;
 
     private BigDecimal amount;
 
     private Instant createdDate;
+
+
     @ManyToOne(fetch = FetchType.LAZY)
-    private GameRoom gameRoom;
+    private Gameroommaster gameroommaster;
 
     public BuyIn() {
     }
 
-    public BuyIn(long id, User user, BigDecimal amount, Instant createdDate, GameRoom gameRoom) {
+    public BuyIn(long id, User user, BigDecimal amount, Instant createdDate, Gameroommaster gameroommaster) {
         this.id = id;
         this.user = user;
         this.amount = amount;
         this.createdDate = createdDate;
-        this.gameRoom = gameRoom;
+        this.gameroommaster = gameroommaster;
     }
 
     public long getId() {
@@ -66,11 +72,11 @@ public class BuyIn {
         this.createdDate = createdDate;
     }
 
-    public GameRoom getGameRoom() {
-        return gameRoom;
+    public Gameroommaster getGameroommaster() {
+        return gameroommaster;
     }
 
-    public void setGameRoom(GameRoom gameRoom) {
-        this.gameRoom = gameRoom;
+    public void setGameroommaster(Gameroommaster gameroommaster) {
+        this.gameroommaster = gameroommaster;
     }
 }

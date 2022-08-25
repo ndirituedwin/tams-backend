@@ -4,8 +4,9 @@ package com.cardgame.Entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Entity
+
 @Table(name = "user_wallet")
+@Entity
 public class Userwallet {
 
     @Id

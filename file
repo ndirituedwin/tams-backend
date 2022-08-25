@@ -1,0 +1,38 @@
+Card table
+use purchase pack id istead of pack table id
+when using api six the cards table status should set to 1
+Onc you open the pack you cannot open it again
+getalluser cards should only show cards whose status=1
+In join room table remove gameroomid and minimum amount.The game room id will automate and minimum amount will insert after entering into the game room
+
+when selling a card, only the cards that we own we should be able to sell
+when buying card you should have enogh money in your wallet
+A user should set fee for the pack/card they own
+In  the sixth api make sure that you own the pack to open it
+
+A player should only be in only one game room
+
+
+SELECT column_name
+  FROM INFORMATION_SCHEMA.COLUMNS
+  WHERE table_name = 'game_rooms_master';
+
+
+while seling a card, it should be open then only you can sell it(setfeeforusercard card api 9)
+while selling a pack, it should be unopen then only you can sell it api 10.
+while selling a card, then user must own the card then only they can sell it api 9.
+while selling a card, if it is already active the same card can't be listed again the same happens for pack also.
+
+when buying  a card amount does not have to be passed, it is subtracted directly from user wallet.
+
+Create logs after a player joins and leave a room
+
+
+The same user cannot buy their on card
+API 16 UPDATe card fee status use card id from user card table.
+MARKET PLACE LOGS TABLE to maintain logs for  updating card and pack
+
+when buying cards display errors
+user deposits table, users should not have same wallet ids
+Create logs for the person who sold card
+

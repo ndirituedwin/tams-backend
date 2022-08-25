@@ -17,6 +17,7 @@ public class UserCard {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(referencedColumnName = "UID")
     private User user;
 
 
@@ -24,16 +25,15 @@ public class UserCard {
     private Cardduplicate cardduplicate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Pack pack;
+    private Unopenedpack unopenedpack;
 
     @Column(name = "opened_card")
     private boolean openedcard=false;
 
-
-    public UserCard(User user, Cardduplicate cardduplicate, Pack pack, boolean openedcard) {
+    public UserCard(User user, Cardduplicate cardduplicate, Unopenedpack unopenedpack, boolean openedcard) {
         this.user = user;
         this.cardduplicate = cardduplicate;
-        this.pack = pack;
+        this.unopenedpack = unopenedpack;
         this.openedcard = openedcard;
     }
 
@@ -67,12 +67,12 @@ public class UserCard {
     }
 
 
-    public Pack getPack() {
-        return pack;
+    public Unopenedpack getUnopenedpack() {
+        return unopenedpack;
     }
 
-    public void setPack(Pack pack) {
-        this.pack = pack;
+    public void setUnopenedpack(Unopenedpack unopenedpack) {
+        this.unopenedpack = unopenedpack;
     }
 
     public boolean isOpenedcard() {

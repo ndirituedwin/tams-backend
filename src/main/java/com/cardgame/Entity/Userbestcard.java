@@ -17,7 +17,8 @@ public class Userbestcard {
     @Column(name = "userbestcard_id")
     private Long userbestcard;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(referencedColumnName = "UID")
     private User user;
 
     public Userbestcard() {

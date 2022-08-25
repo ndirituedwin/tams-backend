@@ -1,6 +1,7 @@
 package com.cardgame.Repo;
 
 import com.cardgame.Entity.Pack;
+import com.cardgame.Entity.Unopenedpack;
 import com.cardgame.Entity.User;
 import com.cardgame.Entity.UserCard;
 import org.springframework.data.domain.Page;
@@ -16,15 +17,18 @@ import java.util.Optional;
 public interface UserCardRepo extends JpaRepository<UserCard,Long> {
     List<UserCard> findAllByUser(User user);
 
-    List<UserCard> findAllByPack(Pack pack1);
+//    List<UserCard> findAllByPack(Pack pack1);
 
-    List<UserCard> findAllByPackAndUser(Pack pack1, User user);
+    List<UserCard> findAllByUnopenedpackAndUser(Unopenedpack unopenedpack, User user);
 
-    Optional<UserCard> findByPack(Pack pack1);
+//    Optional<UserCard> findByPack(Pack pack1);
 
 
     @Query("SELECT V FROM UserCard V WHERE V.user =:user ")
     Page<UserCard> findAllByUserrr(User user, Pageable pageable);
 
 
+    List<UserCard> findAllByUnopenedpack(Unopenedpack unopenedpack);
+
+    Page<UserCard> findAllByUserAndOpenedcardEquals(User user, boolean b, Pageable pageable);
 }

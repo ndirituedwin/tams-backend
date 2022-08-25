@@ -2,6 +2,7 @@ package com.cardgame.Service;
 
 import com.cardgame.Dto.requests.Addmoneytowalletrequest;
 import com.cardgame.Dto.requests.Getwalletbaancerequest;
+import com.cardgame.Dto.requests.Userprofilerequest;
 import com.cardgame.Dto.requests.Withdrawmoneyrequest;
 import com.cardgame.Dto.responses.Addmoneytowaletresponse;
 import com.cardgame.Dto.responses.Userwalletbalance;
@@ -21,14 +22,14 @@ import java.time.Instant;
 @Slf4j
 public class UserwalletService {
 
-    private final Loginrepo loginrepo;
+    private final Userrepo userrepo;
     private final Userwalletrepo userwalletrepo;
     private final Userdepositrepo userdepositrepo;
     private final Withdrawrepo withdrawrepo;
     private final Changingwalletbalancerepo changingwalletbalancerepo;
 
-    public UserwalletService(Loginrepo loginrepo, Userwalletrepo userwalletrepo, Userdepositrepo userdepositrepo, Withdrawrepo withdrawrepo, Changingwalletbalancerepo changingwalletbalancerepo) {
-        this.loginrepo = loginrepo;
+    public UserwalletService(Userrepo userrepo, Userwalletrepo userwalletrepo, Userdepositrepo userdepositrepo, Withdrawrepo withdrawrepo, Changingwalletbalancerepo changingwalletbalancerepo) {
+        this.userrepo = userrepo;
         this.userwalletrepo = userwalletrepo;
         this.userdepositrepo = userdepositrepo;
         this.withdrawrepo = withdrawrepo;
@@ -41,12 +42,12 @@ public class UserwalletService {
         }
 
 
-        User user=loginrepo.findById(getwalletbaancerequest.getUid()).orElseThrow(() -> new UserNotFoundException("user not found"));
+        User user= userrepo.findById(getwalletbaancerequest.getUid()).orElseThrow(() -> new UserNotFoundException("user not found"));
         try {
-            boolean existsbyuserid=userwalletrepo.existsByUserid(user.getId());
+            boolean existsbyuserid=userwalletrepo.existsByUserid(user.getUID());
             if (existsbyuserid){
 
-                Userwallet userwallet=userwalletrepo.findByUserid(user.getId()).orElseThrow(() -> new UserWalletNotFoundException("user wallet not not found"));
+                Userwallet userwallet=userwalletrepo.findByUserid(user.getUID()).orElseThrow(() -> new UserWalletNotFoundException("user wallet not not found"));
                 return new Userwalletbalance(userwallet.getTotalwalletbalance());
             }else {
                 return new Userwalletbalance("You have no details yet.Deposit funds first to view your balance");
@@ -75,13 +76,13 @@ public class UserwalletService {
 //       if (existsbyorderorpaymentids){
 //           return new Addmoneytowaletresponse("order id or payment id provide already exist");
 //       }
-        User user=loginrepo.findById(addmoneytowallet.getUid()).orElseThrow(() -> new UserNotFoundException("user not found"));
         try {
+            User user= userrepo.findById(addmoneytowallet.getUid()).orElseThrow(() -> new UserNotFoundException("user not found"));
 
-            boolean userwalletexists=userwalletrepo.existsByUserid(user.getId());
+            boolean userwalletexists=userwalletrepo.existsByUserid(user.getUID());
             if (userwalletexists){
 //                log.info("firt one");
-                Userwallet userwallet=userwalletrepo.findByUserid(user.getId()).orElseThrow(() -> new UserWalletNotFoundException("your user wallet could not be found "));
+                Userwallet userwallet=userwalletrepo.findByUserid(user.getUID()).orElseThrow(() -> new UserWalletNotFoundException("your user wallet could not be found "));
                BigDecimal availablebalance=userwallet.getTotalwalletbalance();
                 userwallet.setTotalwalletbalance(availablebalance.add(addmoneytowallet.getAmount()));
                  BigDecimal availablewalletbalance=userwalletrepo.save(userwallet).getTotalwalletbalance();
@@ -95,7 +96,7 @@ public class UserwalletService {
                  userdepositrepo.save(userdeposit);
 
                 Changingwalletbalance changingwalletbalance=new Changingwalletbalance();
-                changingwalletbalance.setUserid(user.getId());
+                changingwalletbalance.setUserid(user.getUID());
                 changingwalletbalance.setAction("DEPOSIT");
                 changingwalletbalance.setPreviousbalance(availablebalance);
                 changingwalletbalance.setNewbalance(availablewalletbalance);
@@ -105,7 +106,7 @@ public class UserwalletService {
              }else {
 
                Userwallet newuserwallet=new Userwallet();
-               newuserwallet.setUserid(user.getId());
+               newuserwallet.setUserid(user.getUID());
                newuserwallet.setTotalwalletbalance(addmoneytowallet.getAmount());
                BigDecimal userwalletttb=userwalletrepo.save(newuserwallet).getTotalwalletbalance();
 //               log.info("userwalletttb {}",userwalletttb);
@@ -120,7 +121,7 @@ public class UserwalletService {
                userdepositrepo.save(userdeposit2);
 
                 Changingwalletbalance changingwalletbalance=new Changingwalletbalance();
-                changingwalletbalance.setUserid(user.getId());
+                changingwalletbalance.setUserid(user.getUID());
                 changingwalletbalance.setAction("DEPOSIT");
                 changingwalletbalance.setPreviousbalance(userwalletttb.subtract(addmoneytowallet.getAmount()));
                 changingwalletbalance.setNewbalance(userwalletttb);
@@ -154,9 +155,9 @@ public class UserwalletService {
             return new Withdrawresponse("uid may no be null",withdrawmoneyrequest.getWithdrawamount());
         }
 
-        User user=loginrepo.findById(withdrawmoneyrequest.getUid()).orElseThrow(() -> new UserNotFoundException("user not found"));
+        User user= userrepo.findById(withdrawmoneyrequest.getUid()).orElseThrow(() -> new UserNotFoundException("user not found"));
         try {
-            Userwallet userwallet=userwalletrepo.findByUserid(user.getId()).orElseThrow(() -> new UserWalletNotFoundException("user wallet for that user could not be found"));
+            Userwallet userwallet=userwalletrepo.findByUserid(user.getUID()).orElseThrow(() -> new UserWalletNotFoundException("user wallet for that user could not be found"));
             BigDecimal amountavailable=userwallet.getTotalwalletbalance();
             if (amountavailable.compareTo(BigDecimal.ZERO)<=0){
                 return new Withdrawresponse("you have insufficient funds to complete the withdrawal",amountavailable);
@@ -173,12 +174,12 @@ public class UserwalletService {
                 Withdrawal withdrawal=new Withdrawal();
                 withdrawal.setAmount(withdrawmoneyrequest.getWithdrawamount());
                 withdrawal.setCreateddate(Instant.now());
-                withdrawal.setUserid(user.getId());
+                withdrawal.setUserid(user.getUID());
                 withdrawal.setOrderid(withdrawmoneyrequest.getOrderid());
                 withdrawal.setPaymentid(withdrawmoneyrequest.getPaymentid());
                 BigDecimal withdrawal2=withdrawrepo.save(withdrawal).getAmount();
                 Changingwalletbalance changingwalletbalance=new Changingwalletbalance();
-                changingwalletbalance.setUserid(user.getId());
+                changingwalletbalance.setUserid(user.getUID());
                 changingwalletbalance.setAction("WITHDRAW");
                 changingwalletbalance.setPreviousbalance(availablebalance);
                 changingwalletbalance.setNewbalance(leftbalance);
@@ -195,5 +196,18 @@ public class UserwalletService {
         }
 
         return null;
+    }
+
+    public Object getuserprofile(Userprofilerequest userprofilerequest) {
+        if (userprofilerequest==null){
+            return "the request body may not be null";
+        }
+        try {
+            User user= userrepo.findById(userprofilerequest.getUserid()).orElseThrow(() -> new UserNotFoundException("User with the provided user id not found "));
+
+              return user;
+        }catch (Exception e){
+            return "An exception has occurred while fetching the user profile "+e.getMessage();
+        }
     }
 }

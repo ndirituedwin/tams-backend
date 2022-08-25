@@ -1,11 +1,8 @@
 package com.cardgame.Controller;
 
 import com.cardgame.Dto.requests.*;
-import com.cardgame.Dto.responses.CardFeeResponse;
-import com.cardgame.Dto.responses.PackFeeResponse;
-import com.cardgame.Dto.responses.Packstatusupdate;
+import com.cardgame.Dto.responses.*;
 import com.cardgame.Dto.responses.Page.PagedResponse;
-import com.cardgame.Dto.responses.UserCardResponse;
 import com.cardgame.Service.CardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,6 +30,10 @@ private final CardService cardService;
     }
 
 
+    @PostMapping("/usertest")
+    public Object testcontroller(){
+        return cardService.testcontroller();
+    }
     @PostMapping("/card_duplicate")
     public ResponseEntity<?> duplicatecard(@Valid @RequestBody Cardduplicaterequest cardduplicaterequest, BindingResult result){
         if (result.hasErrors()){
@@ -173,6 +174,17 @@ private final CardService cardService;
 
     }
 
+    @PostMapping("/game-room-users")
+    public PagedResponse<GameRoomUsersResponse> gameroomusers(@RequestParam(value = "page",defaultValue =DEFAULT_PAGE_NUMBER) int page,
+                                                              @RequestParam(value = "size",defaultValue = DEFAULT_PAGE_SIZE)  int size,@RequestBody GameRoomUsersRequest gameRoomUsersRequest){
+        return cardService.gameroomusers(page, size,gameRoomUsersRequest);
+    }
+
+    @PostMapping("/all-game-room-users")
+    public PagedResponse<GameRoomUsersResponse> allgameroomusers(@RequestParam(value = "page",defaultValue =DEFAULT_PAGE_NUMBER) int page,
+                                                              @RequestParam(value = "size",defaultValue = DEFAULT_PAGE_SIZE)  int size){
+        return cardService.allgameroomusers(page, size);
+    }
 
 
 

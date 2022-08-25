@@ -9,7 +9,6 @@ public class BuyCardRequest {
 
     @NotBlank(message = "card id may not be blank")
     private String cardid;
-    private BigDecimal amounttobuy;
     @NotBlank(message = "payment id may not be blank")
     private String paymentid;
     @NotBlank(message = "order id may not be blank")
@@ -35,13 +34,6 @@ public class BuyCardRequest {
         this.cardid = cardid;
     }
 
-    public BigDecimal getAmounttobuy() {
-        return amounttobuy;
-    }
-
-    public void setAmounttobuy(BigDecimal amounttobuy) {
-        this.amounttobuy = amounttobuy;
-    }
 
     public String getPaymentid() {
         return paymentid;

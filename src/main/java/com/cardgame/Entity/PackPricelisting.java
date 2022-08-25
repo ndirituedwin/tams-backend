@@ -13,9 +13,10 @@ public class PackPricelisting {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private Pack pack;
+    private Unopenedpack unopenedpack;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(referencedColumnName = "UID")
     private User user;
 
     @Column(name = "created_at")
@@ -35,15 +36,22 @@ public class PackPricelisting {
         this.status = status;
     }
 
-    public PackPricelisting(Long id, Pack pack, User user, Instant createdat, BigDecimal feeamount, String status) {
+    public PackPricelisting(Long id, Unopenedpack unopenedpack, User user, Instant createdat, BigDecimal feeamount, String status) {
         this.id = id;
-        this.pack = pack;
+        this.unopenedpack = unopenedpack;
         this.user = user;
         this.createdat = createdat;
         this.feeamount = feeamount;
         this.status = status;
     }
 
+    public Unopenedpack getUnopenedpack() {
+        return unopenedpack;
+    }
+
+    public void setUnopenedpack(Unopenedpack unopenedpack) {
+        this.unopenedpack = unopenedpack;
+    }
 
     public Long getId() {
         return id;
@@ -53,13 +61,6 @@ public class PackPricelisting {
         this.id = id;
     }
 
-    public Pack getPack() {
-        return pack;
-    }
-
-    public void setPack(Pack pack) {
-        this.pack = pack;
-    }
 
     public User getUser() {
         return user;

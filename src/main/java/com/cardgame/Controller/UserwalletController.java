@@ -3,6 +3,7 @@ package com.cardgame.Controller;
 
 import com.cardgame.Dto.requests.Addmoneytowalletrequest;
 import com.cardgame.Dto.requests.Getwalletbaancerequest;
+import com.cardgame.Dto.requests.Userprofilerequest;
 import com.cardgame.Dto.requests.Withdrawmoneyrequest;
 import com.cardgame.Service.UserwalletService;
 import org.hibernate.boot.jaxb.spi.Binding;
@@ -45,17 +46,24 @@ private final UserwalletService userwalletService;
     }
 
     @PostMapping("/withdraw")
-    public ResponseEntity<?> withdrawmoney(@Valid @RequestBody Withdrawmoneyrequest withdrawmoneyrequest,BindingResult result){
-        if (result.hasErrors()){
-            Map<String,String> errorMap=new HashMap<>();
-            for (FieldError err: result.getFieldErrors()){
-                errorMap.put(err.getField(),err.getDefaultMessage());
+    public ResponseEntity<?> withdrawmoney(@Valid @RequestBody Withdrawmoneyrequest withdrawmoneyrequest,BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+            for (FieldError err : result.getFieldErrors()) {
+                errorMap.put(err.getField(), err.getDefaultMessage());
             }
-            return new ResponseEntity<Map<String,String>>(errorMap, HttpStatus.BAD_REQUEST);
-        }else{
+            return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
+        } else {
             return ResponseEntity.ok(userwalletService.withdraw(withdrawmoneyrequest));
         }
 
     }
 
+    @PostMapping("/userprofile")
+    public ResponseEntity<?> userprofile(@Valid @RequestBody Userprofilerequest userprofilerequest){
+
+        return ResponseEntity.ok(userwalletService.getuserprofile(userprofilerequest));
+
+
+    }
 }

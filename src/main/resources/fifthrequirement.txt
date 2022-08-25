@@ -1,17 +1,15 @@
-Fifth Requirement:
-Market Place Users can sell the cards they own and buy other cards
- other people own from the marketplace. We need to have an API where
-  when the user buys a particular card the owner of that card will
-  transfer to the person who bought the card and the money they spend
-   to buy the card will be transferred to the person who listed the card’s
-    wallet.
-     Similarly we should allow the user to list the cards they own in the
-     marketplace and set a fee for it, this should be stored in a table
-      and once the sale is completed we need to change the status in the table
-     to we have a history of all the cards listed.
-     If the person wants to delist the card from the marketplace
-      again we should change the status to delisted.
-       The packs the user has stored from the first requirement can also be
-        listed on the marketplace. If they list those packs and someones buys it,
-         the similar transaction should take place where the ownership with change to
-         the new user.
+websocket   https://www.youtube.com/watch?v=8CNVYWiR5fg
+websocket data https://tutorialedge.net/typescript/angular/angular-websockets-tutorial/
+https://indepth.dev/tutorials/angular/how-to-implement-websockets-in-angular-project
+https://stackoverflow.com/questions/55992461/propriety-map-does-not-exist-on-type-subjectmessageevent
+https://stackoverflow.com/questions/55992461/propriety-map-does-not-exist-on-type-subjectmessageevent
+
+https://github.com/EhsanAsaDev/mancala-game/blob/main/src/main/java/ex/com/challenge/controller/GameController.java
+https://github.com/EhsanAsaDev/mancala-game/blob/main/src/main/java/ex/com/challenge/config/WebsocketConfiguration.java
+https://github.com/EhsanAsaDev/mancala-game/blob/main/src/main/java/ex/com/challenge/controller/GameController.java
+https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
+
+https://github.com/EhsanAsaDev/mancala-game/blob/main/src/main/resources/static/js/socket_js.js
+
+https://www.youtube.com/watch?v=cXxEiWudIUY
+https://www.youtube.com/watch?v=cXxEiWudIUY

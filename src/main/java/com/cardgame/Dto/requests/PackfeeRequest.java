@@ -11,6 +11,13 @@ public class PackfeeRequest {
     public PackfeeRequest() {
     }
 
+    public Long getUid() {
+        return uid;
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
 
     public PackfeeRequest(Long packid, Long uid, BigDecimal packfee) {
         this.packid = packid;
