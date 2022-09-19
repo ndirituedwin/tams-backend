@@ -25,7 +25,7 @@ public class CardGameApplication {
   ArrayList<ArrayList<Winninghandrequest>> arrayLists=new ArrayList<>();
 		arrayLists.add(new ArrayList<>(0));
 		arrayLists.add(new ArrayList<>(0));
-		RoomService roomService=new RoomService(null,null,null,null,null,null,null,null,null,null);
+		RoomService roomService=new RoomService(null,null,null,null,null,null,null,null,null,null, gamewinnerrepo);
          roomService.winninghand(arrayLists);
 
 	}

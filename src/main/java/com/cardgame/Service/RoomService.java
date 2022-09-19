@@ -48,8 +48,9 @@ public class RoomService {
     private final Gameroomlogrepo gameroomlogrepo;
     private final WebSocketService webSocketService;
     private final  UserCardRepo userCardRepo;
+    private final Gamewinnerrepo gamewinnerrepo;
 
-    public RoomService(Userrepo userrepo, Userbestcardrepo userbestcardrepo, CardService cardService, Buyinrepo buyinrepo, Userwalletrepo userwalletrepo, Gameroommasterrepo gameroommasterrepo, Gameroomtablerepo gameroomtablerepo, Gameroomlogrepo gameroomlogrepo, WebSocketService webSocketService, UserCardRepo userCardRepo) {
+    public RoomService(Userrepo userrepo, Userbestcardrepo userbestcardrepo, CardService cardService, Buyinrepo buyinrepo, Userwalletrepo userwalletrepo, Gameroommasterrepo gameroommasterrepo, Gameroomtablerepo gameroomtablerepo, Gameroomlogrepo gameroomlogrepo, WebSocketService webSocketService, UserCardRepo userCardRepo, Gamewinnerrepo gamewinnerrepo) {
         this.userrepo = userrepo;
         this.userbestcardrepo = userbestcardrepo;
         this.cardService = cardService;
@@ -60,6 +61,7 @@ public class RoomService {
         this.gameroomlogrepo = gameroomlogrepo;
         this.webSocketService = webSocketService;
         this.userCardRepo = userCardRepo;
+        this.gamewinnerrepo = gamewinnerrepo;
     }
 
 
@@ -808,19 +810,10 @@ public class RoomService {
 
     public Object winninghand(ArrayList<ArrayList<Winninghandrequest>> winninghandrequests) {
 
-//        System.out.println(otherwinninghandcominations.twogoldpairfunctiontwo().en);
-//        System.out.println(otherwinninghandcominations.twogoldpairfunctionthree());
 
         AtomicInteger autoincrement= new AtomicInteger();
         AtomicInteger usercardincrement= new AtomicInteger();
 
-       /**Map<Integer,Integer> firstplayerusercardslist=new HashMap<>();
-       Map<Integer,Integer> secondplayerusercardslist=new HashMap<>();
-
-        int[] frtsttheusercards=new int[5];
-        AtomicInteger f= new AtomicInteger();
-        int[] sectheusercards=new int[5];
-        AtomicInteger s= new AtomicInteger();*/
 
 
         Map<Integer,Integer> uid140layerusercardslist=new HashMap<>();
@@ -834,6 +827,8 @@ public class RoomService {
         List<Integer> uid140matchlist=new ArrayList<>();
         List<Integer> uid199matchlist=new ArrayList<>();
 
+        List<Long> uids=new ArrayList<>(0);
+
 
        winninghandrequests.forEach(winninghandrequest -> {
         System.out.println("Start of ----------"+autoincrement+"----- index");
@@ -843,13 +838,10 @@ public class RoomService {
             boolean userbestcardexists=userbestcardrepo.existsById(winninghandrequest1.getId());
            if (userbestcardexists){
                Userbestcard userbestcard=userbestcardrepo.findById(winninghandrequest1.getId()).orElseThrow(() -> new UserCardNotFoundException("The best user card could not be found"));
-//               UserCard userCard=userCardRepo.findById(userbestcard.getUserbestcard()).orElseThrow(() -> new UserCardNotFoundException("User card not found "));
-//               Integer thecardid=userCard.getCardduplicate().getCard().getCardNumber();
                Integer thecardid=userbestcard.getUserCard().getCardduplicate().getCard().getCardNumber();
                System.out.println("thecardid "+thecardid);
-               //               Integer thecardid=userbestcard.getUserCard().getCardduplicate().getCard().getCardNumber();
-//               Integer thecardid=thecardi.intValue();
-               
+               uids.add(userbestcard.getUser().getUID());
+
                 if (autoincrement.intValue()==0) {
                     uid140layerusercardslist.put(thecardid,uid140layerusercardslist.getOrDefault(thecardid, 0)+1);
                     uid140usercards[f.getAndIncrement()]=thecardid;
@@ -867,19 +859,6 @@ public class RoomService {
 
     });
 
-       /** Integer[] playerone={13,12,13,10,12};
-//        Integer[] playerone={13,11,13,10,11};
-        Integer[] playertwo={7,8,9,11,10};
-
-
-        Arrays.stream(playerone).forEach(integer -> firstplayerusercardslist.put(integer,firstplayerusercardslist.getOrDefault(integer,0)+1));
-        Arrays.stream(playertwo).forEach(integer -> secondplayerusercardslist.put(integer,secondplayerusercardslist.getOrDefault(integer,0)+1));
-
-        Arrays.stream(playerone).forEach(integer ->frtsttheusercards[f.getAndIncrement()]=integer);
-        Arrays.stream(playertwo).forEach(integer ->sectheusercards[s.getAndIncrement()]=integer);
-*/
-        List<Integer> playeronematchlist=new ArrayList<>();
-        List<Integer> playertwomatchlist=new ArrayList<>();
 
         System.out.println("frtsttheusercards+ "+Arrays.toString(uid140usercards));
         System.out.println("sectheusercards+ "+Arrays.toString(uid199usercards));
@@ -1441,25 +1420,19 @@ public class RoomService {
         System.out.println("uid199payerusercardslist "+uid199payerusercardslist+ " and uid199matchlist "+uid199matchlist);
 
         if (uid140matchlist.isEmpty() && uid199matchlist.isEmpty()){
-            int max = IntStream
-                    .concat(IntStream.of(uid140usercards), IntStream.of(uid199usercards))
-                    .max()
-                    .getAsInt();
-            System.out.println("the max"+max);
-            if (Arrays.stream(uid140usercards).anyMatch(value ->value==max)){
-                System.out.println("The uid 140 the game ");
-                return new Winninghandresponse("The uid 140 has won the game "+uid140matchlist+" against uid 199 "+uid199matchlist,PLAYER_ONE+"The winning hand idex "+uid140matchlist);
+            AtomicReference<Integer> uid40sum= new AtomicReference<>(0);
+            AtomicReference<Integer> uid199sum= new AtomicReference<>(0);
+            Arrays.stream(uid140usercards).forEach(value -> uid40sum.updateAndGet(v -> v + value));
+            Arrays.stream(uid199usercards).forEach(value -> uid199sum.updateAndGet(v -> v + value));
+
+//            return null;
+            if (uid40sum.get()>uid199sum.get()){
+                return new Winninghandresponse("The first player  uid 140 has won the game:This is when both cards did not match any winning hand "+uid140matchlist+" and uid 140 usercards are=>+"+Arrays.toString(uid140usercards)+"+ against  uid 199 "+uid199matchlist+" whose usecards are "+Arrays.toString(uid199usercards),PLAYER_ONE+"The winning hand idex "+uid140matchlist);
             }
-            if (Arrays.stream(uid199usercards).anyMatch(value -> value==max )){
-                System.out.println("THe uid 199 player has won the game ");
-                return new Winninghandresponse("THe uid 199  has won the game "+uid199matchlist+ " against uid 140 "+uid140matchlist,PLAYER_TWO+"The winning hand idex "+uid199matchlist);
+            if (uid199sum.get()>uid40sum.get()){
+                return new Winninghandresponse("THe second player uid 199 has won the game:This is when both cards did not match any winning hand "+uid199matchlist+" and uid 199 cards are "+Arrays.toString(uid199usercards)+" against uid 140 "+uid140matchlist+" whose usercards are "+Arrays.toString(uid140usercards),PLAYER_TWO+"The winning hand idex "+uid199matchlist);
             }
 
-            System.out.println("uid 140"+uid140matchlist);
-            System.out.println("uid 199 "+uid199matchlist);
-//            return winninghandrequests.size();
-
-//            return "They did not match any winning hand";
         }
         System.out.println("May be one is empty and the other is not ");
 
@@ -2143,25 +2116,18 @@ public class RoomService {
         System.out.println("uid199payerusercardslist "+uid199payerusercardslist+ " and uid199matchlist "+uid199matchlist);
 
         if (uid140matchlist.isEmpty() && uid199matchlist.isEmpty()){
-            int max = IntStream
-                    .concat(IntStream.of(uid140usercards), IntStream.of(uid199usercards))
-                    .max()
-                    .getAsInt();
-            System.out.println("the max"+max);
-            if (Arrays.stream(uid140usercards).anyMatch(value ->value==max)){
-                System.out.println("The uid 140 the game ");
-                return new Winninghandresponse("The uid 140 has won the game "+uid140matchlist+" against uid 199 "+uid199matchlist,PLAYER_ONE+" The winning hand idex "+uid140matchlist);
-            }
-            if (Arrays.stream(uid199usercards).anyMatch(value -> value==max )){
-                System.out.println("THe uid 199 player has won the game ");
-                return new Winninghandresponse("THe uid 199  has won the game "+uid199matchlist+ " against uid 140 "+uid140matchlist,PLAYER_TWO+" The winning hand idex "+uid199matchlist);
-            }
+            AtomicReference<Integer> uid40sum= new AtomicReference<>(0);
+            AtomicReference<Integer> uid199sum= new AtomicReference<>(0);
+            Arrays.stream(uid140usercards).forEach(value -> uid40sum.updateAndGet(v -> v + value));
+            Arrays.stream(uid199usercards).forEach(value -> uid199sum.updateAndGet(v -> v + value));
 
-            System.out.println("uid 140"+uid140matchlist);
-            System.out.println("uid 199 "+uid199matchlist);
-//            return winninghandrequests.size();
-
-//            return "They did not match any winning hand";
+//            return null;
+            if (uid40sum.get()>uid199sum.get()){
+                return new Winninghandresponse("The first player  uid 140 has won the game:This is when both cards did not match any winning hand "+uid140matchlist+" and uid 140 usercards are=>+"+Arrays.toString(uid140usercards)+"+ against  uid 199 "+uid199matchlist+" whose usecards are "+Arrays.toString(uid199usercards),PLAYER_ONE+"The winning hand idex "+uid140matchlist);
+            }
+            if (uid199sum.get()>uid40sum.get()){
+                return new Winninghandresponse("THe second player uid 199 has won the game:This is when both cards did not match any winning hand "+uid199matchlist+" and uid 199 cards are "+Arrays.toString(uid199usercards)+" against uid 140 "+uid140matchlist+" whose usercards are "+Arrays.toString(uid140usercards),PLAYER_TWO+"The winning hand idex "+uid199matchlist);
+            }
         }
         System.out.println("May be one is empty and the other is not ");
 
