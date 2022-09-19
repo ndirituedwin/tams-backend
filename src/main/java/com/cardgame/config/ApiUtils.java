@@ -22,4 +22,7 @@ public class ApiUtils {
 
     public static final  int MAX_PAGE_SIZE=50;
 
+    public static final  String PLAYER_ONE="PLAYER_ONE";
+    public static final  String PLAYER_TWO="PLAYER_TWO";
+
 }

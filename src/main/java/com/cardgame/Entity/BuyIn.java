@@ -29,15 +29,19 @@ public class BuyIn {
     @ManyToOne(fetch = FetchType.LAZY)
     private Gameroommaster gameroommaster;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    private GameRoomTable gameRoomTable;
+
     public BuyIn() {
     }
 
-    public BuyIn(long id, User user, BigDecimal amount, Instant createdDate, Gameroommaster gameroommaster) {
+    public BuyIn(long id, User user, BigDecimal amount, Instant createdDate, Gameroommaster gameroommaster, GameRoomTable gameRoomTable) {
         this.id = id;
         this.user = user;
         this.amount = amount;
         this.createdDate = createdDate;
         this.gameroommaster = gameroommaster;
+        this.gameRoomTable = gameRoomTable;
     }
 
     public long getId() {
@@ -74,6 +78,14 @@ public class BuyIn {
 
     public Gameroommaster getGameroommaster() {
         return gameroommaster;
+    }
+
+    public GameRoomTable getGameRoomTable() {
+        return gameRoomTable;
+    }
+
+    public void setGameRoomTable(GameRoomTable gameRoomTable) {
+        this.gameRoomTable = gameRoomTable;
     }
 
     public void setGameroommaster(Gameroommaster gameroommaster) {

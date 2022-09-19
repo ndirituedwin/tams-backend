@@ -79,9 +79,10 @@ public class CardService {
         this.packdMarketplacelogrepo = packdMarketplacelogrepo;
     }
 
-    public Object testcontroller(){
-        User user= userrepo.findById(1L).orElseThrow(() -> new UserNotFoundException("user not found"));
-        return user;
+    public Object testcontroller(Long uid){
+        User user= userrepo.findById(uid).orElseThrow(() -> new UserNotFoundException("user not found"));
+        System.out.println(user.getUserwallet().getTotalwalletbalance());
+        return user.getBuyIns().size();
     }
     public Cardduplicateresponse duplicatecard(Cardduplicaterequest cardduplicaterequest) {
 
@@ -214,13 +215,25 @@ public class CardService {
             userCardList.forEach(userCard -> usercardids.add(userCard.getId()));
             System.out.println("usercardid "+usercardids);
 
-            AtomicInteger counter = new AtomicInteger();
+           /** AtomicInteger counter = new AtomicInteger();
            converttolist.stream().forEach(aLong -> {
                if (usercardids.contains(aLong)){
                    counter.getAndIncrement();
                    Userbestcard userbestcard=new Userbestcard();
                    userbestcard.setUser(user);
                    userbestcard.setUserbestcard(aLong);
+                   userbestcardrepo.save(userbestcard);
+               }
+           });*/
+            AtomicInteger counter = new AtomicInteger();
+
+            userCardList.forEach(userCard -> {
+               if (converttolist.contains(userCard.getId())){
+                   counter.getAndIncrement();
+                   Userbestcard userbestcard=new Userbestcard();
+                   userbestcard.setUser(user);
+//                   userbestcard.setUserbestcard(converttolist.get();
+                   userbestcard.setUserCard(userCard);
                    userbestcardrepo.save(userbestcard);
                }
            });
@@ -622,7 +635,7 @@ public class CardService {
         try {
 //            check if user is logged in
             User user=userrepo.findById(buyCardRequest.getUid()).orElseThrow(() -> new UserNotFoundException("User not found"));
-            Userwallet userwallet=userwalletrepo.findByUserid(user.getUID()).orElseThrow(() -> new UserWalletNotFoundException("Your user wallet could not be found"));
+            Userwallet userwallet=userwalletrepo.findByUser(user).orElseThrow(() -> new UserWalletNotFoundException("Your user wallet could not be found"));
             UserCard userCard=userCardRepo.findById(Long.parseLong(buyCardRequest.getCardid())).orElseThrow(() -> new UserCardNotFoundException("User card could not be found"));
 
 
@@ -649,6 +662,7 @@ public class CardService {
 
                     System.out.println("reaching here ");
                     Long orginalcarduser = userCard.getUser().getUID();
+                    User orginalcardusertwo = userCard.getUser();
                     userCard.setUser(user);
                     Long newuserid = userCardRepo.save(userCard).getUser().getUID();
 //            after changing th user update the Carduserchange table
@@ -663,9 +677,9 @@ public class CardService {
                     usercardfeerepo.save(usercardfee);
 
 //            now add the money to the original user wallet
-                    boolean userexistsinuserwallet = userwalletrepo.existsByUserid(orginalcarduser);
+                    boolean userexistsinuserwallet = userwalletrepo.existsByUser(orginalcardusertwo);
                     if (userexistsinuserwallet) {
-                        Userwallet userwallet2 = userwalletrepo.findByUserid(orginalcarduser).orElseThrow(() -> new UserWalletNotFoundException("user wallet not found"));
+                        Userwallet userwallet2 = userwalletrepo.findByUser(orginalcardusertwo).orElseThrow(() -> new UserWalletNotFoundException("user wallet not found"));
                         BigDecimal originalbaance = userwallet2.getTotalwalletbalance();
                         BigDecimal newalbaance = originalbaance.add(originalcardfeeamount);
                         userwallet2.setTotalwalletbalance(newalbaance);
@@ -738,7 +752,7 @@ public class CardService {
             Unopenedpack unopenedpack=unopenedpackrepo.findById(buyPackRequest.getPackid()).orElseThrow(() -> new PackNotFoundException("purchase pack not found"));
 //            Pack pack = packrepo.findById(unopenedpack.getPack().getId()).orElseThrow(() -> new PackNotFoundException("pack not found"));
 
-            Userwallet userwalletbalance=userwalletrepo.findByUserid(user.getUID()).orElseThrow(() -> new UserWalletNotFoundException("user wallet not found"));
+            Userwallet userwalletbalance=userwalletrepo.findByUser(user).orElseThrow(() -> new UserWalletNotFoundException("user wallet not found"));
 //            PackPricelisting packPricelisting =packfeelistingrepo.findByUnopenedpack(unopenedpack).orElseThrow(() -> new PackNotFoundException("pack fee not found") );
 
 
@@ -761,6 +775,7 @@ public class CardService {
                         List<UserCard> userCard = userCardRepo.findAllByUnopenedpack(unopenedpack);
                         userCard.forEach(userCard1 -> {
                             Long originaluser = userCard1.getUser().getUID();
+                            User originalusertwo = userCard1.getUser();
                             userCard1.setUser(user);
                             Long newuserid = userCardRepo.save(userCard1).getUser().getUID();
 //            after changing th user update the Carduserchange table
@@ -772,9 +787,9 @@ public class CardService {
                             carduserchangetrackingrepo.save(carduserchangetracking);
 
 //            now add the money to the original user wallet
-                            boolean userexistsinuserwallet = userwalletrepo.existsByUserid(originaluser);
+                            boolean userexistsinuserwallet = userwalletrepo.existsByUser(originalusertwo);
                             if (userexistsinuserwallet) {
-                                Userwallet userwallet = userwalletrepo.findByUserid(originaluser).orElseThrow(() -> new UserWalletNotFoundException("user wallet not found"));
+                                Userwallet userwallet = userwalletrepo.findByUser(originalusertwo).orElseThrow(() -> new UserWalletNotFoundException("user wallet not found"));
                                 BigDecimal originalbaance = userwallet.getTotalwalletbalance();
                                 BigDecimal newalbaance = originalbaance.add(packPricelisting.getFeeamount());
 

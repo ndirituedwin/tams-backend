@@ -2,20 +2,22 @@ package com.cardgame.Controller;
 
 import com.cardgame.Dto.requests.*;
 
+import com.cardgame.Dto.requests.gamelogic.CardPairingtest;
+import com.cardgame.Dto.requests.gamelogic.Winninghandrequest;
+import com.cardgame.Dto.responses.Buyintableresponse;
 import com.cardgame.Dto.responses.GameRoomResponse;
 import com.cardgame.Dto.responses.Page.PagedResponse;
+import com.cardgame.Dto.responses.RoomTableusersresponse;
 import com.cardgame.Service.RoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 
 import static com.cardgame.config.ApiUtils.DEFAULT_PAGE_NUMBER;
 import static com.cardgame.config.ApiUtils.DEFAULT_PAGE_SIZE;
@@ -85,6 +87,11 @@ public class RoomController {
         return roomService.gamerooms(page, size);
 
     }
+    @PostMapping("/getbyid")
+    public Object getmasterroombyid(@Valid @RequestBody Gameroommasterrequest gameroommasterrequest){
+
+        return roomService.getgameroombyid(gameroommasterrequest);
+    }
 
 
     @GetMapping("/get-user-buy-in")
@@ -92,5 +99,55 @@ public class RoomController {
 
         return ResponseEntity.ok(roomService.getuserbuyin(userBuyInRequest));
     }
+    @PostMapping("/buy-in")
+    public ResponseEntity<?> savebuyin(@Valid @RequestBody Buyinrequest buyinrequest){
+
+        return new ResponseEntity<>(roomService.buyin(buyinrequest),HttpStatus.CREATED);
+
+    }
+//    @PostMapping("/getusersforagameroomtable")
+//        public PagedResponse<RoomTableusersresponse> getusersforagameroomtable(@RequestParam(value = "page",defaultValue =DEFAULT_PAGE_NUMBER) int page,
+//        @RequestParam(value = "size",defaultValue = DEFAULT_PAGE_SIZE)  int size,@Valid @RequestBody Getusersforroomtablerequest getusersforroomtablerequest){
+//        return  roomService.getusersforagameroomtable(getusersforroomtablerequest,page,size);
+//    }
+@PostMapping("/getusersforagameroomtable")
+public List<RoomTableusersresponse> getusersforagameroomtable(@Valid @RequestBody Getusersforroomtablerequest getusersforroomtablerequest){
+
+    return  roomService.getusersforagameroomtable(getusersforroomtablerequest);
+}
+    @PostMapping("/currentUserroom")
+    public ResponseEntity<?> currentUserroomdetailsrespon(@Valid @RequestBody Currentuserroomrequest currentuserroomrequest ){
+        return new ResponseEntity<>(roomService.currentUserroomdetailsresponse(currentuserroomrequest),HttpStatus.OK);
+    }
+
+    @PostMapping("/updateplayerbuyin")
+    public ResponseEntity<?> updateplayeronebuyin(@Valid @RequestBody Updateplayerbuyinrequest updateplayerbuyinrequest){
+        return new ResponseEntity<>(roomService.updateplayerbuyin(updateplayerbuyinrequest),HttpStatus.OK);
+    }
+    @PostMapping("/updateallplayerbuyin")
+    public List<Buyintableresponse> updateallplayerbuyin(@Valid @RequestBody Updateallplayerbuyinsrequest updateallplayerbuyinsrequest){
+        return roomService.updateallplayersbuyin(updateallplayerbuyinsrequest);
+    }
+
+    @PostMapping("/winninghand")
+//    ArrayList<ArrayList<String>> listOLists = new ArrayList<ArrayList<String>>();
+//    public Object winninghand(@Valid @RequestBody List<Winninghandrequest> winninghandrequest){
+        public Object winninghand(@Valid @RequestBody ArrayList<ArrayList<Winninghandrequest>> winninghandrequests){
+        return roomService.winninghand(winninghandrequests);
+    }
+
+
+    @PostMapping("/testcardpairings")
+    public Object pairingtest(@Valid @RequestBody CardPairingtest cardPairingtest){
+
+        return roomService.cardpairingtest(cardPairingtest);
+    }
+
+
+
+
+
+
+
 
 }

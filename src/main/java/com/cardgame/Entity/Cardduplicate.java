@@ -1,17 +1,21 @@
 package com.cardgame.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 
 @Entity
 @Table(name = "card_duplicates")
 //@Data
 //@AllArgsConstructor
 //@NoArgsConstructor
-public class Cardduplicate {
+public class Cardduplicate implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

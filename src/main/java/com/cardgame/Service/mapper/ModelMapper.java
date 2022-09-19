@@ -61,4 +61,27 @@ public class ModelMapper {
         return gameRoomUsersResponse;
 
     }
+
+    public static RoomTableusersresponse maptableuserstotableuserresponse(User user,Long tableid) {
+        RoomTableusersresponse roomTableusersresponse=new RoomTableusersresponse();
+        roomTableusersresponse.setUserwallet(user.getUserwallet());
+        roomTableusersresponse.setBuyIn(user.getBuyIns().stream().filter(buyIn -> buyIn.getGameRoomTable().getId()==tableid).findFirst().orElse(null));
+        roomTableusersresponse.setUserbestcardList(user.getUserbestcards());
+        return roomTableusersresponse;
+    }
+
+    public static Buyintableresponse mapbuyinstobuyinresponse(BuyIn buyIn1) {
+        Buyintableresponse buyintableresponse=new Buyintableresponse();
+        buyintableresponse.setAmount(buyIn1.getAmount());
+        buyintableresponse.setBuyinid(buyIn1.getId());
+        buyintableresponse.setGameroommasterid(buyIn1.getGameroommaster().getId());
+        buyintableresponse.setGameroomtable(buyIn1.getGameRoomTable().getId());
+        buyintableresponse.setUid(buyIn1.getUser().getUID());
+        return buyintableresponse;
+    }
+//    public static RoomTableusersresponse maptableuserstotableuserresponse(User user) {
+//        RoomTableusersresponse roomTableusersresponse=new RoomTableusersresponse();
+//        roomTableusersresponse.setUser(user);
+//        return roomTableusersresponse;
+//    }
 }

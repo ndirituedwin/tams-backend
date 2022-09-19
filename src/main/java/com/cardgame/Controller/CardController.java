@@ -30,9 +30,9 @@ private final CardService cardService;
     }
 
 
-    @PostMapping("/usertest")
-    public Object testcontroller(){
-        return cardService.testcontroller();
+    @PostMapping("/usertest/{uid}")
+    public Object testcontroller(@PathVariable("uid") Long uid){
+        return cardService.testcontroller(uid);
     }
     @PostMapping("/card_duplicate")
     public ResponseEntity<?> duplicatecard(@Valid @RequestBody Cardduplicaterequest cardduplicaterequest, BindingResult result){

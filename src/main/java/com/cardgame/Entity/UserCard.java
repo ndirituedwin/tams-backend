@@ -1,16 +1,23 @@
 package com.cardgame.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 
 @Entity
 @Table(name = "user_cards")
 @Data
 //@AllArgsConstructor
-public class UserCard {
+public class UserCard implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +36,10 @@ public class UserCard {
 
     @Column(name = "opened_card")
     private boolean openedcard=false;
+
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "userCard")
+//    private List<Userbestcard> userbestcards=new ArrayList<>(0);
 
     public UserCard(User user, Cardduplicate cardduplicate, Unopenedpack unopenedpack, boolean openedcard) {
         this.user = user;

@@ -1,14 +1,17 @@
 package com.cardgame.Entity;
 
-import org.hibernate.annotations.NaturalId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table(name = "user_table")
-public class User {
+//@JsonIgnoreProperties
+public class User implements Serializable {
 
 
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,21 +25,38 @@ public class User {
     @Id
     private Long UID;
 
-    @OneToMany(mappedBy = "id")
+
+
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "user")
+    private Userwallet userwallet;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
     private List<BuyIn> buyIns=new ArrayList<>(0);
 
-    @OneToMany(mappedBy = "id")
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
     private List<Gameroomlog> gameroomlogs=new ArrayList<>(0);
 
-    @OneToMany(mappedBy = "id")
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
     private List<PackPricelisting> packPricelistings=new ArrayList<>(0);
-    @OneToMany(mappedBy = "id")
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
     private List<Unopenedpack> unopenedpacks=new ArrayList<>(0);
-    @OneToMany(mappedBy = "id")
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
     private List<Userbestcard> userbestcards=new ArrayList<>(0);
-    @OneToMany(mappedBy = "id")
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
     private List<UserCard> userCards=new ArrayList<>(0);
-    @OneToMany(mappedBy = "id")
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
     private List<Usercardfee> usercardfees=new ArrayList<>(0);
 
     public User(long id, String username, Long UID) {
@@ -45,7 +65,8 @@ public class User {
         this.UID = UID;
     }
 
-    public User(List<BuyIn> buyIns, List<Gameroomlog> gameroomlogs, List<PackPricelisting> packPricelistings, List<Unopenedpack> unopenedpacks, List<Userbestcard> userbestcards, List<UserCard> userCards, List<Usercardfee> usercardfees) {
+    public User(Userwallet userwallet, List<BuyIn> buyIns, List<Gameroomlog> gameroomlogs, List<PackPricelisting> packPricelistings, List<Unopenedpack> unopenedpacks, List<Userbestcard> userbestcards, List<UserCard> userCards, List<Usercardfee> usercardfees) {
+        this.userwallet = userwallet;
         this.buyIns = buyIns;
         this.gameroomlogs = gameroomlogs;
         this.packPricelistings = packPricelistings;
@@ -53,6 +74,14 @@ public class User {
         this.userbestcards = userbestcards;
         this.userCards = userCards;
         this.usercardfees = usercardfees;
+    }
+
+    public Userwallet getUserwallet() {
+        return userwallet;
+    }
+
+    public void setUserwallet(Userwallet userwallet) {
+        this.userwallet = userwallet;
     }
 
     public User() {

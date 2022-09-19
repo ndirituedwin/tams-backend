@@ -5,25 +5,27 @@ import java.math.BigDecimal;
 public class Buyinrequest {
 
 
-    private Long userid;
+    private Long uid;
     private BigDecimal amount;
-    private Long gameroomid;
+    private Long mastertableid;
+    private Long roomid;
 
     public Buyinrequest() {
     }
 
-    public Buyinrequest(Long userid, BigDecimal amount, Long gameroomid) {
-        this.userid = userid;
+    public Buyinrequest(Long uid, BigDecimal amount, Long mastertableid, Long roomid) {
+        this.uid = uid;
         this.amount = amount;
-        this.gameroomid = gameroomid;
+        this.mastertableid = mastertableid;
+        this.roomid = roomid;
     }
 
-    public Long getUserid() {
-        return userid;
+    public Long getUid() {
+        return uid;
     }
 
-    public void setUserid(Long userid) {
-        this.userid = userid;
+    public void setUid(Long uid) {
+        this.uid = uid;
     }
 
     public BigDecimal getAmount() {
@@ -34,11 +36,19 @@ public class Buyinrequest {
         this.amount = amount;
     }
 
-    public Long getGameroomid() {
-        return gameroomid;
+    public Long getMastertableid() {
+        return mastertableid;
     }
 
-    public void setGameroomid(Long gameroomid) {
-        this.gameroomid = gameroomid;
+    public void setMastertableid(Long mastertableid) {
+        this.mastertableid = mastertableid;
+    }
+
+    public Long getRoomid() {
+        return roomid;
+    }
+
+    public void setRoomid(Long roomid) {
+        this.roomid = roomid;
     }
 }

@@ -1,13 +1,18 @@
 package com.cardgame.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Fetch;
+import org.springframework.core.serializer.Serializer;
 
 import javax.persistence.*;
+import java.io.Serializable;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 
 @Entity
 @Table(name = "purchased_packs")
-public class Unopenedpack {
+public class Unopenedpack implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

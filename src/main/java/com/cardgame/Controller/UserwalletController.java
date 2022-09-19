@@ -40,8 +40,8 @@ private final UserwalletService userwalletService;
         }
     }
 
-    @GetMapping("/get-user-total-wallet-balance")
-    public ResponseEntity<?> getuserwalletbalance(Getwalletbaancerequest getwalletbaancerequest){
+    @PostMapping("/get-user-total-wallet-balance")
+    public ResponseEntity<?> getuserwalletbalance(@Valid @RequestBody Getwalletbaancerequest getwalletbaancerequest){
         return ResponseEntity.ok(userwalletService.getwalletservice(getwalletbaancerequest));
     }
 

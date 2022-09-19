@@ -14,8 +14,9 @@ public class Userwallet {
     private Long id;
 
 
-    @Column(name = "user_id",unique = true)
-    private Long userid;
+//    @Column(name = "user_id",unique = true)
+    @OneToOne(fetch = FetchType.LAZY)
+    private User user;
 
 
     @Column(name = "total_wallet_balance")
@@ -24,9 +25,9 @@ public class Userwallet {
     public Userwallet() {
     }
 
-    public Userwallet(Long id, Long userid, BigDecimal totalwalletbalance) {
+    public Userwallet(Long id, User user, BigDecimal totalwalletbalance) {
         this.id = id;
-        this.userid = userid;
+        this.user = user;
         this.totalwalletbalance = totalwalletbalance;
     }
 
@@ -38,14 +39,13 @@ public class Userwallet {
         this.id = id;
     }
 
-    public Long getUserid() {
-        return userid;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserid(Long userid) {
-        this.userid = userid;
+    public void setUser(User user) {
+        this.user = user;
     }
-
 
     public BigDecimal getTotalwalletbalance() {
         return totalwalletbalance;
