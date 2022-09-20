@@ -1,14 +1,13 @@
 package com.cardgame.Service;
 
 import com.cardgame.Dto.requests.*;
-import com.cardgame.Dto.requests.gamelogic.CardPairingtest;
-import com.cardgame.Dto.requests.gamelogic.Winninghandrequest;
-import com.cardgame.Dto.requests.gamelogic.Winninghandresponse;
+import com.cardgame.Dto.requests.gamelogic.*;
 import com.cardgame.Dto.responses.*;
 import com.cardgame.Dto.responses.Page.PagedResponse;
 import com.cardgame.Entity.*;
 import com.cardgame.Exceptions.*;
 import com.cardgame.Repo.*;
+// import com.cardgame.Repo.Gamewinnerrepo;
 import com.cardgame.Service.mapper.ModelMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -810,6 +809,10 @@ public class RoomService {
 
     public Object winninghand(ArrayList<ArrayList<Winninghandrequest>> winninghandrequests) {
 
+        System.out.println(winninghandrequests.size());
+        System.out.println(winninghandrequests.get(2).get(0).getAmount());
+        System.out.println(winninghandrequests.get(2).get(0).getGameroomtableid());
+        System.out.println(winninghandrequests.get(2).get(0));
 
         AtomicInteger autoincrement= new AtomicInteger();
         AtomicInteger usercardincrement= new AtomicInteger();
@@ -827,37 +830,40 @@ public class RoomService {
         List<Integer> uid140matchlist=new ArrayList<>();
         List<Integer> uid199matchlist=new ArrayList<>();
 
-        List<Long> uids=new ArrayList<>(0);
+        List<Long> playersuids=new ArrayList<>(0);
 
 
-       winninghandrequests.forEach(winninghandrequest -> {
-        System.out.println("Start of ----------"+autoincrement+"----- index");
-         winninghandrequest.forEach(winninghandrequest1 -> {
-            System.out.println("inside index-------- "+usercardincrement);
+        winninghandrequests.forEach(winninghandrequest -> {
 
-            boolean userbestcardexists=userbestcardrepo.existsById(winninghandrequest1.getId());
-           if (userbestcardexists){
-               Userbestcard userbestcard=userbestcardrepo.findById(winninghandrequest1.getId()).orElseThrow(() -> new UserCardNotFoundException("The best user card could not be found"));
-               Integer thecardid=userbestcard.getUserCard().getCardduplicate().getCard().getCardNumber();
-               System.out.println("thecardid "+thecardid);
-               uids.add(userbestcard.getUser().getUID());
+            System.out.println("Start of ----------" + autoincrement + "----- index");
 
-                if (autoincrement.intValue()==0) {
-                    uid140layerusercardslist.put(thecardid,uid140layerusercardslist.getOrDefault(thecardid, 0)+1);
-                    uid140usercards[f.getAndIncrement()]=thecardid;
+            if (autoincrement.get() != 2) {
+            winninghandrequest.forEach(winninghandrequest1 -> {
+                System.out.println("inside index-------- " + usercardincrement);
+
+                boolean userbestcardexists = userbestcardrepo.existsById(winninghandrequest1.getId());
+                if (userbestcardexists) {
+                    Userbestcard userbestcard = userbestcardrepo.findById(winninghandrequest1.getId()).orElseThrow(() -> new UserCardNotFoundException("The best user card could not be found"));
+                    Integer thecardid = userbestcard.getUserCard().getCardduplicate().getCard().getCardNumber();
+                    System.out.println("thecardid " + thecardid);
+                    playersuids.add(userbestcard.getUser().getUID());
+
+                    if (autoincrement.intValue() == 0) {
+                        uid140layerusercardslist.put(thecardid, uid140layerusercardslist.getOrDefault(thecardid, 0) + 1);
+                        uid140usercards[f.getAndIncrement()] = thecardid;
+                    }
+                    if (autoincrement.intValue() == 1) {
+                        uid199payerusercardslist.put(thecardid, uid199payerusercardslist.getOrDefault(thecardid, 0) + 1);
+                        uid199usercards[s.getAndIncrement()] = thecardid;
+                    }
                 }
-                if(autoincrement.intValue()==1){
-                    uid199payerusercardslist.put(thecardid, uid199payerusercardslist.getOrDefault(thecardid, 0)+1);
-                     uid199usercards[s.getAndIncrement()]=thecardid;
-                }
-            }
-            System.out.println("End OF inside Index ---------"+usercardincrement);
-           usercardincrement.getAndIncrement();
+                System.out.println("End OF inside Index ---------" + usercardincrement);
+                usercardincrement.getAndIncrement();
+            });
+            System.out.println("End of ----" + autoincrement + "------ Index");
+            autoincrement.getAndIncrement();
+        }
         });
-        System.out.println("End of ----"+autoincrement+"------ Index");
-        autoincrement.getAndIncrement();
-
-    });
 
 
         System.out.println("frtsttheusercards+ "+Arrays.toString(uid140usercards));
@@ -1427,10 +1433,30 @@ public class RoomService {
 
 //            return null;
             if (uid40sum.get()>uid199sum.get()){
-                return new Winninghandresponse("The first player  uid 140 has won the game:This is when both cards did not match any winning hand "+uid140matchlist+" and uid 140 usercards are=>+"+Arrays.toString(uid140usercards)+"+ against  uid 199 "+uid199matchlist+" whose usecards are "+Arrays.toString(uid199usercards),PLAYER_ONE+"The winning hand idex "+uid140matchlist);
+                Gamewinner gamewinner=new Gamewinner();
+                gamewinner.setPlayeruid(playersuids.get(0));
+                gamewinner.setGameRoomTableuid(winninghandrequests.get(2).get(0).getGameroomtableid());
+                gamewinner.setAction(WON_GAME);
+                gamewinner.setCards(Arrays.toString(uid140usercards));
+                gamewinner.setIndexes(uid140matchlist.toString());
+                gamewinner.setAmount(winninghandrequests.get(2).get(0).getAmount());
+                gamewinner.setCreateddate(Instant.now());
+                gamewinnerrepo.save(gamewinner);
+
+                return new Winninghandresponse("The first player  uid 140 has won the game:This is when both cards did not match any winning hand "+uid140matchlist+" and uid 140 usercards are=>+"+Arrays.toString(uid140usercards)+"+ against  uid 199 "+uid199matchlist+" whose usecards are "+Arrays.toString(uid199usercards),"The winning hand index "+uid140matchlist,PLAYER_ONE);
             }
             if (uid199sum.get()>uid40sum.get()){
-                return new Winninghandresponse("THe second player uid 199 has won the game:This is when both cards did not match any winning hand "+uid199matchlist+" and uid 199 cards are "+Arrays.toString(uid199usercards)+" against uid 140 "+uid140matchlist+" whose usercards are "+Arrays.toString(uid140usercards),PLAYER_TWO+"The winning hand idex "+uid199matchlist);
+                Gamewinner gamewinner=new Gamewinner();
+                gamewinner.setPlayeruid(playersuids.get(1));
+                gamewinner.setGameRoomTableuid(winninghandrequests.get(2).get(0).getGameroomtableid());
+                gamewinner.setAction(WON_GAME);
+                gamewinner.setCards(Arrays.toString(uid140usercards));
+                gamewinner.setIndexes(uid140matchlist.toString());
+                gamewinner.setAmount(winninghandrequests.get(2).get(0).getAmount());
+                gamewinner.setCreateddate(Instant.now());
+                gamewinnerrepo.save(gamewinner);
+
+                return new Winninghandresponse("THe second player uid 199 has won the game:This is when both cards did not match any winning hand "+uid199matchlist+" and uid 199 cards are "+Arrays.toString(uid199usercards)+" against uid 140 "+uid140matchlist+" whose usercards are "+Arrays.toString(uid140usercards),"The winning hand index "+uid199matchlist,PLAYER_TWO);
             }
 
         }
@@ -1441,12 +1467,22 @@ public class RoomService {
 
 
         if (uid140matchlist.isEmpty() && !uid199matchlist.isEmpty()){
-            System.out.println("THe uid 140 PLayer cards array do not match with any winning hand while the uid 199 player  does");
 
             System.out.println("The uid 140 cards"+uid140matchlist);
             System.out.println("The uid 199 cards"+uid199matchlist);
 
-            return new Winninghandresponse("PLayer two uid 199 has won the game "+uid199matchlist+" against player one uid 140 "+uid140matchlist,PLAYER_TWO+"The winning hand idex "+uid199matchlist);
+            Gamewinner gamewinner=new Gamewinner();
+            gamewinner.setPlayeruid(playersuids.get(1));
+            gamewinner.setGameRoomTableuid(winninghandrequests.get(2).get(0).getGameroomtableid());
+            gamewinner.setAction(WON_GAME);
+            gamewinner.setCards(Arrays.toString(uid140usercards));
+            gamewinner.setIndexes(uid140matchlist.toString());
+            gamewinner.setAmount(winninghandrequests.get(2).get(0).getAmount());
+            gamewinner.setCreateddate(Instant.now());
+            gamewinnerrepo.save(gamewinner);
+
+
+            return new Winninghandresponse("PLayer two uid 199 has won the game "+uid199matchlist+" against player one uid 140 "+uid140matchlist,"The winning hand index "+uid199matchlist,PLAYER_TWO);
         }
         if (!uid140matchlist.isEmpty() && uid199matchlist.isEmpty() ){
             System.out.println("The first player uid 140 matches cards array with any of the winning hand while player  two uid 199 does not  ");
@@ -1454,20 +1490,54 @@ public class RoomService {
             System.out.println("uid 140 "+uid140matchlist);
             System.out.println("uid 199 "+uid199matchlist);
 
-            return new Winninghandresponse("PLayer one  uid 140 has won the game "+uid140matchlist+" against player two"+uid199matchlist,PLAYER_ONE+"The winning hand idex "+uid140matchlist);
+            Gamewinner gamewinner=new Gamewinner();
+            gamewinner.setPlayeruid(playersuids.get(0));
+            gamewinner.setGameRoomTableuid(winninghandrequests.get(2).get(0).getGameroomtableid());
+            gamewinner.setAction(WON_GAME);
+            gamewinner.setCards(Arrays.toString(uid140usercards));
+            gamewinner.setIndexes(uid140matchlist.toString());
+            gamewinner.setAmount(winninghandrequests.get(2).get(0).getAmount());
+            gamewinner.setCreateddate(Instant.now());
+            gamewinnerrepo.save(gamewinner);
+
+
+            return new Winninghandresponse("PLayer one  uid 140 has won the game "+uid140matchlist+" against player two"+uid199matchlist,"The winning hand idex "+uid140matchlist,PLAYER_ONE);
         }
         if (uid140matchlist.get(0)<uid199matchlist.get(0)){
 //            System.out.println(winninghandrequests.get(0).get(0).getUser().getUID());
             System.out.println("uid 140 won playeruid140matchlist"+uid140matchlist);
             System.out.println("uid 199 lost player uid199matchlist "+uid199matchlist);
-            System.out.println("PLayer One uid 140 has won the game");
-            return new Winninghandresponse("Player one uid 140 has won "+uid140matchlist+" against player two uid 199 "+uid199matchlist,PLAYER_ONE+"The winning hand idex "+uid140matchlist);
+
+            Gamewinner gamewinner=new Gamewinner();
+            gamewinner.setPlayeruid(playersuids.get(0));
+            gamewinner.setGameRoomTableuid(winninghandrequests.get(2).get(0).getGameroomtableid());
+            gamewinner.setAction(WON_GAME);
+            gamewinner.setCards(Arrays.toString(uid140usercards));
+            gamewinner.setIndexes(uid140matchlist.toString());
+            gamewinner.setAmount(winninghandrequests.get(2).get(0).getAmount());
+            gamewinner.setCreateddate(Instant.now());
+            gamewinnerrepo.save(gamewinner);
+
+
+            return new Winninghandresponse("Player one uid 140 has won "+uid140matchlist+" against player two uid 199 "+uid199matchlist,"The winning hand index "+uid140matchlist,PLAYER_ONE);
 
         }else if(uid199matchlist.get(0)<uid140matchlist.get(0)){
-            System.out.println("Player two uid 199 has won the game");
+
+
+            Gamewinner gamewinner=new Gamewinner();
+            gamewinner.setPlayeruid(playersuids.get(1));
+            gamewinner.setGameRoomTableuid(winninghandrequests.get(2).get(0).getGameroomtableid());
+            gamewinner.setAction(WON_GAME);
+            gamewinner.setCards(Arrays.toString(uid140usercards));
+            gamewinner.setIndexes(uid140matchlist.toString());
+            gamewinner.setAmount(winninghandrequests.get(2).get(0).getAmount());
+            gamewinner.setCreateddate(Instant.now());
+            gamewinnerrepo.save(gamewinner);
+
+
             System.out.println("uid 140 lost playeruid140matchlist"+uid140matchlist);
             System.out.println("uid 199 won player uid199matchlist "+uid199matchlist);
-            return new Winninghandresponse("PLayer two uid 199 has won "+uid199matchlist+" against uid 140 "+uid140matchlist,PLAYER_TWO+"The winning hand idex "+uid199matchlist);
+            return new Winninghandresponse("PLayer two uid 199 has won "+uid199matchlist+" against uid 140 "+uid140matchlist,"The winning hand index "+uid199matchlist,PLAYER_TWO);
 
         }
 
@@ -1482,12 +1552,32 @@ public class RoomService {
 
 //            return null;
             if (uid40sum.get()>uid199sum.get()){
-                System.out.println("The first player uid 140 has won the game when both cards are equal ");
-                return new Winninghandresponse("The first player  uid 140 has won the game:This is when both cards are equal "+uid140matchlist+" and uid 140 usercards are=>+"+Arrays.toString(uid140usercards)+"+ against  uid 199 "+uid199matchlist+" whose usecards are "+Arrays.toString(uid199usercards),PLAYER_ONE+"The winning hand idex "+uid140matchlist);
+                Gamewinner gamewinner=new Gamewinner();
+                gamewinner.setPlayeruid(playersuids.get(0));
+                gamewinner.setGameRoomTableuid(winninghandrequests.get(2).get(0).getGameroomtableid());
+                gamewinner.setAction(WON_GAME);
+                gamewinner.setCards(Arrays.toString(uid140usercards));
+                gamewinner.setIndexes(uid140matchlist.toString());
+                gamewinner.setAmount(winninghandrequests.get(2).get(0).getAmount());
+                gamewinner.setCreateddate(Instant.now());
+                gamewinnerrepo.save(gamewinner);
+
+
+                return new Winninghandresponse("The first player  uid 140 has won the game:This is when both cards are equal "+uid140matchlist+" and uid 140 usercards are=>+"+Arrays.toString(uid140usercards)+"+ against  uid 199 "+uid199matchlist+" whose usecards are "+Arrays.toString(uid199usercards),"The winning hand idex "+uid140matchlist,PLAYER_ONE);
             }
             if (uid199sum.get()>uid40sum.get()){
-                System.out.println("THe second player uid 199 has won the game:This is when both cards are equal ");
-                return new Winninghandresponse("THe second player uid 199 has won the game:This is when both cards are equal "+uid199matchlist+" and uid 199 cards are "+Arrays.toString(uid199usercards)+" against uid 140 "+uid140matchlist+" whose usercards are "+Arrays.toString(uid140usercards),PLAYER_TWO+"The winning hand idex "+uid199matchlist);
+                Gamewinner gamewinner=new Gamewinner();
+                gamewinner.setPlayeruid(playersuids.get(1));
+                gamewinner.setGameRoomTableuid(winninghandrequests.get(2).get(0).getGameroomtableid());
+                gamewinner.setAction(WON_GAME);
+                gamewinner.setCards(Arrays.toString(uid140usercards));
+                gamewinner.setIndexes(uid140matchlist.toString());
+                gamewinner.setAmount(winninghandrequests.get(2).get(0).getAmount());
+                gamewinner.setCreateddate(Instant.now());
+                gamewinnerrepo.save(gamewinner);
+
+
+                return new Winninghandresponse("THe second player uid 199 has won the game:This is when both cards are equal "+uid199matchlist+" and uid 199 cards are "+Arrays.toString(uid199usercards)+" against uid 140 "+uid140matchlist+" whose usercards are "+Arrays.toString(uid140usercards),"The winning hand idex "+uid199matchlist,PLAYER_TWO);
             }
         }
         return null;
@@ -2123,10 +2213,10 @@ public class RoomService {
 
 //            return null;
             if (uid40sum.get()>uid199sum.get()){
-                return new Winninghandresponse("The first player  uid 140 has won the game:This is when both cards did not match any winning hand "+uid140matchlist+" and uid 140 usercards are=>+"+Arrays.toString(uid140usercards)+"+ against  uid 199 "+uid199matchlist+" whose usecards are "+Arrays.toString(uid199usercards),PLAYER_ONE+"The winning hand idex "+uid140matchlist);
+                return new Winninghandresponse("The first player  uid 140 has won the game:This is when both cards did not match any winning hand "+uid140matchlist+" and uid 140 usercards are=>+"+Arrays.toString(uid140usercards)+"+ against  uid 199 "+uid199matchlist+" whose usecards are "+Arrays.toString(uid199usercards),"The winning hand idex "+uid140matchlist,PLAYER_ONE);
             }
             if (uid199sum.get()>uid40sum.get()){
-                return new Winninghandresponse("THe second player uid 199 has won the game:This is when both cards did not match any winning hand "+uid199matchlist+" and uid 199 cards are "+Arrays.toString(uid199usercards)+" against uid 140 "+uid140matchlist+" whose usercards are "+Arrays.toString(uid140usercards),PLAYER_TWO+"The winning hand idex "+uid199matchlist);
+                return new Winninghandresponse("THe second player uid 199 has won the game:This is when both cards did not match any winning hand "+uid199matchlist+" and uid 199 cards are "+Arrays.toString(uid199usercards)+" against uid 140 "+uid140matchlist+" whose usercards are "+Arrays.toString(uid140usercards),"The winning hand idex "+uid199matchlist,PLAYER_TWO);
             }
         }
         System.out.println("May be one is empty and the other is not ");
@@ -2141,7 +2231,7 @@ public class RoomService {
             System.out.println("The uid 140 cards"+uid140matchlist);
             System.out.println("The uid 199 cards"+uid199matchlist);
 
-            return new Winninghandresponse("PLayer two uid 199 has won the game "+uid199matchlist+" against player one uid 140 "+uid140matchlist,PLAYER_TWO+" The winning hand idex "+uid199matchlist);
+            return new Winninghandresponse("PLayer two uid 199 has won the game "+uid199matchlist+" against player one uid 140 "+uid140matchlist," The winning hand idex "+uid199matchlist,PLAYER_TWO);
         }
         if (!uid140matchlist.isEmpty() && uid199matchlist.isEmpty() ){
             System.out.println("The first player uid 140 matches cards array with any of the winning hand while player  two uid 199 does not  ");
@@ -2149,20 +2239,20 @@ public class RoomService {
             System.out.println("uid 140 "+uid140matchlist);
             System.out.println("uid 199 "+uid199matchlist);
 
-            return new Winninghandresponse("PLayer one  uid 140 has won the game "+uid140matchlist+" against player two"+uid199matchlist,PLAYER_ONE+" The winning hand idex "+uid140matchlist);
+            return new Winninghandresponse("PLayer one  uid 140 has won the game "+uid140matchlist+" against player two"+uid199matchlist," The winning hand idex "+uid140matchlist,PLAYER_ONE);
         }
         if (uid140matchlist.get(0)<uid199matchlist.get(0)){
 //            System.out.println(winninghandrequests.get(0).get(0).getUser().getUID());
             System.out.println("uid 140 won playeruid140matchlist"+uid140matchlist);
             System.out.println("uid 199 lost player uid199matchlist "+uid199matchlist);
             System.out.println("PLayer One uid 140 has won the game");
-            return new Winninghandresponse("Player one uid 140 has won "+uid140matchlist+" against player two uid 199 "+uid199matchlist,PLAYER_ONE+" The winning hand idex "+uid140matchlist);
+            return new Winninghandresponse("Player one uid 140 has won "+uid140matchlist+" against player two uid 199 "+uid199matchlist," The winning hand idex "+uid140matchlist,PLAYER_ONE);
 
         }else if(uid199matchlist.get(0)<uid140matchlist.get(0)){
             System.out.println("Player two uid 199 has won the game");
             System.out.println("uid 140 lost playeruid140matchlist"+uid140matchlist);
             System.out.println("uid 199 won player uid199matchlist "+uid199matchlist);
-            return new Winninghandresponse("PLayer two uid 199 has won "+uid199matchlist+" against uid 140 "+uid140matchlist,PLAYER_TWO+" The winning hand idex "+uid199matchlist);
+            return new Winninghandresponse("PLayer two uid 199 has won "+uid199matchlist+" against uid 140 "+uid140matchlist," The winning hand idex "+uid199matchlist,PLAYER_TWO);
 
         }
 
@@ -2178,11 +2268,11 @@ public class RoomService {
 //            return null;
             if (uid40sum.get()>uid199sum.get()){
                 System.out.println("The first player uid 140 has won the game when both cards are equal ");
-                return new Winninghandresponse("The first player  uid 140 has won the game:This is when both cards are equal "+uid140matchlist+" and uid 140 usercards are=>+"+Arrays.toString(uid140usercards)+"+ against  uid 199 "+uid199matchlist+" whose usecards are "+Arrays.toString(uid199usercards),PLAYER_ONE+" The winning hand idex "+uid140matchlist);
+                return new Winninghandresponse("The first player  uid 140 has won the game:This is when both cards are equal "+uid140matchlist+" and uid 140 usercards are=>+"+Arrays.toString(uid140usercards)+"+ against  uid 199 "+uid199matchlist+" whose usecards are "+Arrays.toString(uid199usercards)," The winning hand idex "+uid140matchlist,PLAYER_ONE);
             }
             if (uid199sum.get()>uid40sum.get()){
                 System.out.println("THe second player uid 199 has won the game:This is when both cards are equal ");
-                return new Winninghandresponse("THe second player uid 199 has won the game:This is when both cards are equal "+uid199matchlist+" and uid 199 cards are "+Arrays.toString(uid199usercards)+" against uid 140 "+uid140matchlist+" whose usercards are "+Arrays.toString(uid140usercards),PLAYER_TWO+" The winning hand idex "+uid199matchlist);
+                return new Winninghandresponse("THe second player uid 199 has won the game:This is when both cards are equal "+uid199matchlist+" and uid 199 cards are "+Arrays.toString(uid199usercards)+" against uid 140 "+uid140matchlist+" whose usercards are "+Arrays.toString(uid140usercards)," The winning hand idex "+uid199matchlist,PLAYER_TWO);
             }
         }
         return null;

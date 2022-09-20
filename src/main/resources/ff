@@ -1,0 +1,765 @@
+
+            AtomicInteger autoincrement= new AtomicInteger();
+            AtomicInteger usercardincrement= new AtomicInteger();
+
+
+
+            Map<Integer,Integer> uid140layerusercardslist=new HashMap<>();
+            Map<Integer,Integer> uid199payerusercardslist=new HashMap<>();
+
+            int[] uid140usercards=new int[5];
+            AtomicInteger f= new AtomicInteger();
+            int[] uid199usercards=new int[5];
+            AtomicInteger s= new AtomicInteger();
+
+            List<Integer> uid140matchlist=new ArrayList<>();
+            List<Integer> uid199matchlist=new ArrayList<>();
+
+            List<Long> playersuids=new ArrayList<>(0);
+
+
+            winninghandrequests.get(1).forEach(winninghandrequest -> {
+
+                System.out.println("Start of ----------"+autoincrement+"----- index");
+                winninghandrequest.getWinninghandrequest().forEach(winninghandrequest1 -> {
+                    System.out.println("inside index-------- "+usercardincrement);
+
+                    boolean userbestcardexists=userbestcardrepo.existsById(winninghandrequest1.getId());
+                    if (userbestcardexists){
+                        Userbestcard userbestcard=userbestcardrepo.findById(winninghandrequest1.getId()).orElseThrow(() -> new UserCardNotFoundException("The best user card could not be found"));
+                        Integer thecardid=userbestcard.getUserCard().getCardduplicate().getCard().getCardNumber();
+                        System.out.println("thecardid "+thecardid);
+                        playersuids.add(userbestcard.getUser().getUID());
+
+                        if (autoincrement.intValue()==0) {
+                            uid140layerusercardslist.put(thecardid,uid140layerusercardslist.getOrDefault(thecardid, 0)+1);
+                            uid140usercards[f.getAndIncrement()]=thecardid;
+                        }
+                        if(autoincrement.intValue()==1){
+                            uid199payerusercardslist.put(thecardid, uid199payerusercardslist.getOrDefault(thecardid, 0)+1);
+                            uid199usercards[s.getAndIncrement()]=thecardid;
+                        }
+                    }
+                    System.out.println("End OF inside Index ---------"+usercardincrement);
+                    usercardincrement.getAndIncrement();
+                });
+                System.out.println("End of ----"+autoincrement+"------ Index");
+                autoincrement.getAndIncrement();
+
+            });
+
+
+            System.out.println("frtsttheusercards+ "+Arrays.toString(uid140usercards));
+            System.out.println("sectheusercards+ "+Arrays.toString(uid199usercards));
+            System.out.println("firstplayerusercardslist "+uid140layerusercardslist);
+            System.out.println("secondplayerusercardslist "+uid199payerusercardslist);
+//  check if the first player has any winning hand
+
+/**first player*/
+            RoomService.Otherwinninghandcominations otherwinninghandcominations=new RoomService.Otherwinninghandcominations();
+
+            thewinninghands().forEach((integer, integerIntegerMap) -> {
+                System.out.println("Integer index second player "+integer);
+
+                if (integer==1){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet()) ||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twogoldpairfunctiontwo().entrySet()) ||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twogoldpairfunctionthree().entrySet())
+                    ){
+                        uid140matchlist.add(integer);
+                    }
+                }
+                if (integer==2){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid140matchlist.add(integer);
+                    }
+                }
+                if (integer==3){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid140matchlist.add(integer);
+                    }
+                }
+
+                if(integer==4){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet()) ||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHousetwomapfunction().entrySet()) ||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHousethreemapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHousefourmapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHousefivemapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHousesixmapfunction().entrySet()) ||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHousesevenmapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouseeightmapfunction().entrySet()) ||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouseninemapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHousetenmapfunction().entrySet())   ||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouseelevenmapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse12mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse13mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse14mapfunction().entrySet()) ||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse15mapfunction().entrySet())
+                    ){
+
+                        uid140matchlist.add(integer);
+                    }
+                }
+                if (integer==5){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet()) ||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse1mapfunction().entrySet()) ||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse2mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse3mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse41mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse5mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse6mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse7mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse8mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse9mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse10mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse11mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse122mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse133mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse144mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse155mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse166mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse177mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.SilverHighFullHouse188mapfunction().entrySet())
+                    ){
+                        uid140matchlist.add(integer);
+
+
+                    }
+
+
+                }
+                if (integer==6){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.TwoSilverPair1mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.TwoSilverPair2mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.TwoSilverPair3mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.TwoSilverPair4mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.TwoSilverPair5mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.TwoSilverPair6mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.TwoSilverPair7mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.TwoSilverPair8mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.TwoSilverPair9mapfunction().entrySet())
+                    ){
+                        uid140matchlist.add(integer);
+                    }
+                }
+                if (integer==7){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.GoldPair1mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.GoldPair2mapfunction().entrySet())){
+                        uid140matchlist.add(integer);
+                    }
+                }
+
+                if (integer==8){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid140matchlist.add(integer);
+                    }
+                }
+                if (integer==9){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid140matchlist.add(integer);
+                    }            }
+                if (integer==10){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid140matchlist.add(integer);
+                    }            }
+                if (integer==11){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid140matchlist.add(integer);
+                    }            }
+
+
+                if (integer==12){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair1mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair2mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair3mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair4mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair5mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair6mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair7mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair8mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair9mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair10mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair11mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair12mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair13mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair14mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair14mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair15mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair16mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair17mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair18mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair19mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair20mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair21mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair22mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair23mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threesilverpairtwobronzepair24mapfunction().entrySet())
+                    ){
+                        uid140matchlist.add(integer);
+                    }
+                }
+                if (integer==13){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair1mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair2mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair3mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair4mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair5mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair6mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair7mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair8mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair9mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair10mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair11mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair12mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair13mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair14mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair15mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair16mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair17mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair18mapfunction().entrySet())||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.threebronzepairtwobronzepair19mapfunction().entrySet())
+
+                    ){
+                        uid140matchlist.add(integer);
+                    }
+                }
+                if (integer==14){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.silverthreeofakind1mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.silverthreeofakind2mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.silverthreeofakind3mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.silverthreeofakind4mapfunction().entrySet())){
+
+                        uid140matchlist.add(integer);
+
+                    }
+                }
+                if (integer==15){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.bronzefourofakind1mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.bronzefourofakind2mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.bronzefourofakind3mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.bronzefourofakind4mapfunction().entrySet())
+                    ){
+                        uid140matchlist.add(integer);
+
+                    }
+
+                }
+                if (integer==16){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid140matchlist.add(integer);
+                    }
+                }
+                if (integer==17){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair1mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair2mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair3mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair4mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair5mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair6mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair7mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair8mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair9mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair10mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair11mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair12mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair13mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair14mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair15mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair16mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair17mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair18mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair19mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair20mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair21mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair22mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair23mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpairthreebronzepair24mapfunction().entrySet())) {
+                        uid140matchlist.add(integer);
+                    }
+                }
+                if(integer==18){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair1mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair2mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair3mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair4mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair5mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair6mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair7mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair8mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair9mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair10mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair11mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair12mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair13mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair14mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair15mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair16mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair17mapfunction().entrySet())||
+                            uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair18mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.onebronzepaironesilverpair19mapfunction().entrySet())
+
+                    ){
+                        uid140matchlist.add(integer);
+
+                    }
+                }
+                if (integer==19){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())
+                            ||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpair2mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpair3mapfunction().entrySet())
+                            ||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpair4mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twosilverpair5mapfunction().entrySet())
+
+                    ){
+                        uid140matchlist.add(integer);
+
+                    }
+                }
+                if (integer==20){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())
+                            ||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twobronzepair2bronzepair1mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twobronzepair2bronzepair2mapfunction().entrySet())
+                            ||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twobronzepair2bronzepair3mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twobronzepair2bronzepair4mapfunction().entrySet())
+                            ||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twobronzepair2bronzepair5mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twobronzepair2bronzepair6mapfunction().entrySet())
+                            ||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twobronzepair2bronzepair7mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twobronzepair2bronzepair8mapfunction().entrySet())
+                            ||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.twobronzepair2bronzepair9mapfunction().entrySet())){
+                        uid140matchlist.add(integer);
+                    }
+
+
+
+                }
+                if (integer==21){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid140matchlist.add(integer);
+                    }
+                }
+                if (integer==22){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid140matchlist.add(integer);
+                    }
+                }
+                if (integer==23){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())
+                            ||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.bronzethreeofakind1mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.bronzethreeofakind2mapfunction().entrySet())
+                            ||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.bronzethreeofakind3mapfunction().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.bronzethreeofakind4mapfunction().entrySet())
+                    ){
+                        uid140matchlist.add(integer);
+                    }
+                }
+                if (integer==24){
+                    if (uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())
+                            ||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.bronzepair1map1function().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.bronzepair2map2function().entrySet())
+                            ||uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.bronzepair3map3function().entrySet())|| uid140layerusercardslist.entrySet().containsAll(otherwinninghandcominations.bronzepair4map4function().entrySet())){
+
+                        uid140matchlist.add(integer);
+
+                    }
+
+                }
+
+
+
+
+                System.out.println(uid140layerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet()));
+                System.out.println("contains uid140 "+integerIntegerMap);
+            });
+/**end of first player*/
+
+
+
+
+//  check if the second player has any winning hand
+/**second player*/
+            RoomService.Otherwinninghandcominations otherwinninghandcominationss=new RoomService.Otherwinninghandcominations();
+
+            System.out.println("uid 199 card list is here "+uid199payerusercardslist);
+            System.out.println("uid 140 card list is here "+uid140layerusercardslist);
+            thewinninghands().forEach((integer, integerIntegerMap) -> {
+                System.out.println("Integer indexuid199 "+integer);
+
+                if (integer==1){
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet()) ||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twogoldpairfunctiontwo().entrySet()) ||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twogoldpairfunctionthree().entrySet())
+                    ){
+                        uid199matchlist.add(integer);
+                    }
+                }
+                if (integer==2){
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid199matchlist.add(integer);
+                    }
+                }
+                if (integer==3){
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid199matchlist.add(integer);
+                    }
+                }
+
+                if(integer==4){
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet()) ||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHousetwomapfunction().entrySet()) ||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHousethreemapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHousefourmapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHousefivemapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHousesixmapfunction().entrySet()) ||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHousesevenmapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouseeightmapfunction().entrySet()) ||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouseninemapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHousetenmapfunction().entrySet())   ||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouseelevenmapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse12mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse13mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse14mapfunction().entrySet()) ||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse15mapfunction().entrySet())
+
+
+                    ){
+
+                        uid199matchlist.add(integer);
+                    }
+                }
+                if (integer==5){
+                    System.out.println("Herereer5 "+integer+"fff "+integerIntegerMap);
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet()) ||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse1mapfunction().entrySet()) ||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse2mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse3mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse41mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse5mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse6mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse7mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse8mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse9mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse10mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse11mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse122mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse133mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse144mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse155mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse166mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse177mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.SilverHighFullHouse188mapfunction().entrySet())
+                    ){
+                        uid199matchlist.add(integer);
+                        System.out.println();
+
+
+                    }
+
+
+                }
+                if (integer==6){
+                    System.out.println("Herereer6 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.TwoSilverPair1mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.TwoSilverPair2mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.TwoSilverPair3mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.TwoSilverPair4mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.TwoSilverPair5mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.TwoSilverPair6mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.TwoSilverPair7mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.TwoSilverPair8mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.TwoSilverPair9mapfunction().entrySet())
+                    ){
+                        uid199matchlist.add(integer);
+                    }
+                }
+                if (integer==7){
+                    System.out.println("Herereer7 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.GoldPair1mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.GoldPair2mapfunction().entrySet())){
+                        uid199matchlist.add(integer);
+                    }
+                }
+
+                if (integer==8){
+                    System.out.println("Herereer8 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid199matchlist.add(integer);
+                    }
+
+                }
+                if (integer==9){
+                    System.out.println("Herereer9 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid199matchlist.add(integer);
+                    }
+                }
+                if (integer==10){
+                    System.out.println("Herereer10 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid199matchlist.add(integer);
+                    }
+                }
+                if (integer==11){
+                    System.out.println("Herereer11 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid199matchlist.add(integer);
+                    }
+                }
+
+
+                if (integer==12){
+                    System.out.println("Herereer12 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair1mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair2mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair3mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair4mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair5mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair6mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair7mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair8mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair9mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair10mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair11mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair12mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair13mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair14mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair14mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair15mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair16mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair17mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair18mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair19mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair20mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair21mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair22mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair23mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threesilverpairtwobronzepair24mapfunction().entrySet())
+                    ){
+                        uid199matchlist.add(integer);
+                    }
+                }
+                if (integer==13){
+                    System.out.println("Herereer13 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair1mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair2mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair3mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair4mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair5mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair6mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair7mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair8mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair9mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair10mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair11mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair12mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair13mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair14mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair15mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair16mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair17mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair18mapfunction().entrySet())||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.threebronzepairtwobronzepair19mapfunction().entrySet())
+
+                    ){
+                        uid199matchlist.add(integer);
+                    }
+                }
+                if (integer==14){
+                    System.out.println("Herereer14 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.silverthreeofakind1mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.silverthreeofakind2mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.silverthreeofakind3mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.silverthreeofakind4mapfunction().entrySet())){
+
+                        uid199matchlist.add(integer);
+
+                    }
+                }
+                if (integer==15){
+                    System.out.println("Herereer15 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.bronzefourofakind1mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.bronzefourofakind2mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.bronzefourofakind3mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.bronzefourofakind4mapfunction().entrySet())
+                    ){
+                        uid199matchlist.add(integer);
+
+                    }
+
+                }
+                if (integer==16){
+                    System.out.println("Herereer16 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid199matchlist.add(integer);
+                    }
+
+
+                }
+                if (integer==17){
+                    System.out.println("Herereer17 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair1mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair2mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair3mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair4mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair5mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair6mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair7mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair8mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair9mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair10mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair11mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair12mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair13mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair14mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair15mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair16mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair17mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair18mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair19mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair20mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair21mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair22mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair23mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpairthreebronzepair24mapfunction().entrySet())) {
+                        uid199matchlist.add(integer);
+                    }
+                }
+                if(integer==18){
+                    System.out.println("Herereer18 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair1mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair2mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair3mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair4mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair5mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair6mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair7mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair8mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair9mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair10mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair11mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair12mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair13mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair14mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair15mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair16mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair17mapfunction().entrySet())||
+                            uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair18mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.onebronzepaironesilverpair19mapfunction().entrySet())
+
+                    ){
+                        uid199matchlist.add(integer);
+
+                    }
+                }
+                if (integer==19){
+                    System.out.println("Herereer19 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())
+                            ||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpair2mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpair3mapfunction().entrySet())
+                            ||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpair4mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twosilverpair5mapfunction().entrySet())
+
+                    ){
+                        uid199matchlist.add(integer);
+
+                    }
+                }
+                if (integer==20){
+                    System.out.println("Herereer20 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())
+                            ||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twobronzepair2bronzepair1mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twobronzepair2bronzepair2mapfunction().entrySet())
+                            ||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twobronzepair2bronzepair3mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twobronzepair2bronzepair4mapfunction().entrySet())
+                            ||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twobronzepair2bronzepair5mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twobronzepair2bronzepair6mapfunction().entrySet())
+                            ||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twobronzepair2bronzepair7mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twobronzepair2bronzepair8mapfunction().entrySet())
+                            ||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.twobronzepair2bronzepair9mapfunction().entrySet())){
+                        uid199matchlist.add(integer);
+                    }
+
+
+
+                }
+                if (integer==21){
+                    System.out.println("Herereer21 "+integer+"fff "+integerIntegerMap);
+
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid199matchlist.add(integer);
+                    }
+                }
+                if (integer==22){
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+                        uid199matchlist.add(integer);
+                    }
+                }
+                if (integer==23){
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())
+                            ||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.bronzethreeofakind1mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.bronzethreeofakind2mapfunction().entrySet())
+                            ||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.bronzethreeofakind3mapfunction().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.bronzethreeofakind4mapfunction().entrySet())
+                    ){
+                        uid199matchlist.add(integer);
+                    }
+                }
+                if (integer==24){
+                    if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())
+                            ||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.bronzepair1map1function().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.bronzepair2map2function().entrySet())
+                            ||uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.bronzepair3map3function().entrySet())|| uid199payerusercardslist.entrySet().containsAll(otherwinninghandcominationss.bronzepair4map4function().entrySet())){
+
+                        uid199matchlist.add(integer);
+
+                    }
+
+                }
+
+
+
+//            if (uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet())){
+//                uid199matchlist.add(integer);
+//            }
+                System.out.println(uid199payerusercardslist.entrySet().containsAll(integerIntegerMap.entrySet()));
+                System.out.println("contains uid199 "+integerIntegerMap);
+            });
+            /**end of the second player*/
+
+
+//        check if all elements in list is high card
+            System.out.println("uid140matchlistnnn "+uid140matchlist);
+            System.out.println("uid199matchlisthhhgh "+uid199matchlist);
+            Collections.sort(uid140matchlist);
+            Collections.sort(uid199matchlist);
+            System.out.println("uid140layerusercardslist "+uid140layerusercardslist+" and uid140matchlist "+uid140matchlist);
+            System.out.println("uid199payerusercardslist "+uid199payerusercardslist+ " and uid199matchlist "+uid199matchlist);
+
+            if (uid140matchlist.isEmpty() && uid199matchlist.isEmpty()){
+                AtomicReference<Integer> uid40sum= new AtomicReference<>(0);
+                AtomicReference<Integer> uid199sum= new AtomicReference<>(0);
+                Arrays.stream(uid140usercards).forEach(value -> uid40sum.updateAndGet(v -> v + value));
+                Arrays.stream(uid199usercards).forEach(value -> uid199sum.updateAndGet(v -> v + value));
+
+//            return null;
+                if (uid40sum.get()>uid199sum.get()){
+                    Gamewinner gamewinner=new Gamewinner();
+                    gamewinner.setPlayeruid(playersuids.get(0));
+                    gamewinner.setGameRoomTableuid(winninghandrequests.get(0).get(0).getGamewinnerrequest().getGameroomtableid());
+                    gamewinner.setAction(WON_GAME);
+                    gamewinner.setCards(Arrays.toString(uid140usercards));
+                    gamewinner.setIndexes(uid140matchlist.toString());
+                    gamewinner.setAmount(winninghandrequests.get(0).get(0).getGamewinnerrequest().getAmount());
+                    gamewinner.setCreateddate(Instant.now());
+                    gamewinnerrepo.save(gamewinner);
+
+                    return new Winninghandresponse("The first player  uid 140 has won the game:This is when both cards did not match any winning hand "+uid140matchlist+" and uid 140 usercards are=>+"+Arrays.toString(uid140usercards)+"+ against  uid 199 "+uid199matchlist+" whose usecards are "+Arrays.toString(uid199usercards),PLAYER_ONE+"The winning hand idex "+uid140matchlist);
+                }
+                if (uid199sum.get()>uid40sum.get()){
+                    Gamewinner gamewinner=new Gamewinner();
+                    gamewinner.setPlayeruid(playersuids.get(1));
+                    gamewinner.setGameRoomTableuid(winninghandrequests.get(0).get(0).getGamewinnerrequest().getGameroomtableid());
+                    gamewinner.setAction(WON_GAME);
+                    gamewinner.setCards(Arrays.toString(uid140usercards));
+                    gamewinner.setIndexes(uid140matchlist.toString());
+                    gamewinner.setAmount(winninghandrequests.get(0).get(0).getGamewinnerrequest().getAmount());
+                    gamewinner.setCreateddate(Instant.now());
+                    gamewinnerrepo.save(gamewinner);
+
+                    return new Winninghandresponse("THe second player uid 199 has won the game:This is when both cards did not match any winning hand "+uid199matchlist+" and uid 199 cards are "+Arrays.toString(uid199usercards)+" against uid 140 "+uid140matchlist+" whose usercards are "+Arrays.toString(uid140usercards),PLAYER_TWO+"The winning hand idex "+uid199matchlist);
+                }
+
+            }
+            System.out.println("May be one is empty and the other is not ");
+
+            System.out.println("uid 140 player"+uid140matchlist);
+            System.out.println("uid 199 player "+uid199matchlist);
+
+
+            if (uid140matchlist.isEmpty() && !uid199matchlist.isEmpty()){
+
+                System.out.println("The uid 140 cards"+uid140matchlist);
+                System.out.println("The uid 199 cards"+uid199matchlist);
+
+                Gamewinner gamewinner=new Gamewinner();
+                gamewinner.setPlayeruid(playersuids.get(1));
+                gamewinner.setGameRoomTableuid(winninghandrequests.get(0).get(0).getGamewinnerrequest().getGameroomtableid());
+                gamewinner.setAction(WON_GAME);
+                gamewinner.setCards(Arrays.toString(uid140usercards));
+                gamewinner.setIndexes(uid140matchlist.toString());
+                gamewinner.setAmount(winninghandrequests.get(0).get(0).getGamewinnerrequest().getAmount());
+                gamewinner.setCreateddate(Instant.now());
+                gamewinnerrepo.save(gamewinner);
+
+
+                return new Winninghandresponse("PLayer two uid 199 has won the game "+uid199matchlist+" against player one uid 140 "+uid140matchlist,PLAYER_TWO+"The winning hand idex "+uid199matchlist);
+            }
+            if (!uid140matchlist.isEmpty() && uid199matchlist.isEmpty() ){
+                System.out.println("The first player uid 140 matches cards array with any of the winning hand while player  two uid 199 does not  ");
+
+                System.out.println("uid 140 "+uid140matchlist);
+                System.out.println("uid 199 "+uid199matchlist);
+
+                Gamewinner gamewinner=new Gamewinner();
+                gamewinner.setPlayeruid(playersuids.get(0));
+                gamewinner.setGameRoomTableuid(winninghandrequests.get(0).get(0).getGamewinnerrequest().getGameroomtableid());
+                gamewinner.setAction(WON_GAME);
+                gamewinner.setCards(Arrays.toString(uid140usercards));
+                gamewinner.setIndexes(uid140matchlist.toString());
+                gamewinner.setAmount(winninghandrequests.get(0).get(0).getGamewinnerrequest().getAmount());
+                gamewinner.setCreateddate(Instant.now());
+                gamewinnerrepo.save(gamewinner);
+
+
+                return new Winninghandresponse("PLayer one  uid 140 has won the game "+uid140matchlist+" against player two"+uid199matchlist,PLAYER_ONE+"The winning hand idex "+uid140matchlist);
+            }
+            if (uid140matchlist.get(0)<uid199matchlist.get(0)){
+//            System.out.println(winninghandrequests.get(0).get(0).getUser().getUID());
+                System.out.println("uid 140 won playeruid140matchlist"+uid140matchlist);
+                System.out.println("uid 199 lost player uid199matchlist "+uid199matchlist);
+
+                Gamewinner gamewinner=new Gamewinner();
+                gamewinner.setPlayeruid(playersuids.get(0));
+                gamewinner.setGameRoomTableuid(winninghandrequests.get(0).get(0).getGamewinnerrequest().getGameroomtableid());
+                gamewinner.setAction(WON_GAME);
+                gamewinner.setCards(Arrays.toString(uid140usercards));
+                gamewinner.setIndexes(uid140matchlist.toString());
+                gamewinner.setAmount(winninghandrequests.get(0).get(0).getGamewinnerrequest().getAmount());
+                gamewinner.setCreateddate(Instant.now());
+                gamewinnerrepo.save(gamewinner);
+
+
+                return new Winninghandresponse("Player one uid 140 has won "+uid140matchlist+" against player two uid 199 "+uid199matchlist,PLAYER_ONE+"The winning hand idex "+uid140matchlist);
+
+            }else if(uid199matchlist.get(0)<uid140matchlist.get(0)){
+
+
+                Gamewinner gamewinner=new Gamewinner();
+                gamewinner.setPlayeruid(playersuids.get(1));
+                gamewinner.setGameRoomTableuid(winninghandrequests.get(0).get(0).getGamewinnerrequest().getGameroomtableid());
+                gamewinner.setAction(WON_GAME);
+                gamewinner.setCards(Arrays.toString(uid140usercards));
+                gamewinner.setIndexes(uid140matchlist.toString());
+                gamewinner.setAmount(winninghandrequests.get(0).get(0).getGamewinnerrequest().getAmount());
+                gamewinner.setCreateddate(Instant.now());
+                gamewinnerrepo.save(gamewinner);
+
+
+                System.out.println("uid 140 lost playeruid140matchlist"+uid140matchlist);
+                System.out.println("uid 199 won player uid199matchlist "+uid199matchlist);
+                return new Winninghandresponse("PLayer two uid 199 has won "+uid199matchlist+" against uid 140 "+uid140matchlist,PLAYER_TWO+"The winning hand idex "+uid199matchlist);
+
+            }
+
+
+            if ( uid140matchlist.get(0).equals(uid199matchlist.get(0))){
+                AtomicReference<Integer> uid40sum= new AtomicReference<>(0);
+                AtomicReference<Integer> uid199sum= new AtomicReference<>(0);
+                Arrays.stream(uid140usercards).forEach(value -> uid40sum.updateAndGet(v -> v + value));
+                Arrays.stream(uid199usercards).forEach(value -> uid199sum.updateAndGet(v -> v + value));
+                System.out.println("uid40sum "+uid40sum);
+                System.out.println("uid199sum "+uid199sum);
+
+//            return null;
+                if (uid40sum.get()>uid199sum.get()){
+                    Gamewinner gamewinner=new Gamewinner();
+                    gamewinner.setPlayeruid(playersuids.get(0));
+                    gamewinner.setGameRoomTableuid(winninghandrequests.get(0).get(0).getGamewinnerrequest().getGameroomtableid());
+                    gamewinner.setAction(WON_GAME);
+                    gamewinner.setCards(Arrays.toString(uid140usercards));
+                    gamewinner.setIndexes(uid140matchlist.toString());
+                    gamewinner.setAmount(winninghandrequests.get(0).get(0).getGamewinnerrequest().getAmount());
+                    gamewinner.setCreateddate(Instant.now());
+                    gamewinnerrepo.save(gamewinner);
+
+
+                    return new Winninghandresponse("The first player  uid 140 has won the game:This is when both cards are equal "+uid140matchlist+" and uid 140 usercards are=>+"+Arrays.toString(uid140usercards)+"+ against  uid 199 "+uid199matchlist+" whose usecards are "+Arrays.toString(uid199usercards),PLAYER_ONE+"The winning hand idex "+uid140matchlist);
+                }
+                if (uid199sum.get()>uid40sum.get()){
+                    Gamewinner gamewinner=new Gamewinner();
+                    gamewinner.setPlayeruid(playersuids.get(1));
+                    gamewinner.setGameRoomTableuid(winninghandrequests.get(0).get(0).getGamewinnerrequest().getGameroomtableid());
+                    gamewinner.setAction(WON_GAME);
+                    gamewinner.setCards(Arrays.toString(uid140usercards));
+                    gamewinner.setIndexes(uid140matchlist.toString());
+                    gamewinner.setAmount(winninghandrequests.get(0).get(0).getGamewinnerrequest().getAmount());
+                    gamewinner.setCreateddate(Instant.now());
+                    gamewinnerrepo.save(gamewinner);
+
+
+                    return new Winninghandresponse("THe second player uid 199 has won the game:This is when both cards are equal "+uid199matchlist+" and uid 199 cards are "+Arrays.toString(uid199usercards)+" against uid 140 "+uid140matchlist+" whose usercards are "+Arrays.toString(uid140usercards),PLAYER_TWO+"The winning hand idex "+uid199matchlist);
+                }
+            }

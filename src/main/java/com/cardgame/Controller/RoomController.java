@@ -2,12 +2,14 @@ package com.cardgame.Controller;
 
 import com.cardgame.Dto.requests.*;
 
-import com.cardgame.Dto.requests.gamelogic.CardPairingtest;
-import com.cardgame.Dto.requests.gamelogic.Winninghandrequest;
+import com.cardgame.Dto.requests.gamelogic.*;
+
+import com.cardgame.Dto.requests.gamelogic.gameactions.Gameactionrequest;
 import com.cardgame.Dto.responses.Buyintableresponse;
 import com.cardgame.Dto.responses.GameRoomResponse;
 import com.cardgame.Dto.responses.Page.PagedResponse;
 import com.cardgame.Dto.responses.RoomTableusersresponse;
+import com.cardgame.Service.Gameactionsservice;
 import com.cardgame.Service.RoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static com.cardgame.config.ApiUtils.DEFAULT_PAGE_NUMBER;
@@ -29,9 +30,11 @@ import static com.cardgame.config.ApiUtils.DEFAULT_PAGE_SIZE;
 public class RoomController {
 
   private final RoomService roomService;
+  private final Gameactionsservice gameactionsservice;
 
-    public RoomController(RoomService roomService) {
+    public RoomController(RoomService roomService, Gameactionsservice gameactionsservice) {
         this.roomService = roomService;
+        this.gameactionsservice = gameactionsservice;
     }
 
 
@@ -130,9 +133,9 @@ public List<RoomTableusersresponse> getusersforagameroomtable(@Valid @RequestBod
     }
 
     @PostMapping("/winninghand")
-//    ArrayList<ArrayList<String>> listOLists = new ArrayList<ArrayList<String>>();
-//    public Object winninghand(@Valid @RequestBody List<Winninghandrequest> winninghandrequest){
         public Object winninghand(@Valid @RequestBody ArrayList<ArrayList<Winninghandrequest>> winninghandrequests){
+//        public Object winninghand(@Valid @RequestBody ArrayList<Winningdata> winninghandrequests){
+//        System.out.println("The request body "+gamewinnerequest.getAmount());
         return roomService.winninghand(winninghandrequests);
     }
 
@@ -141,6 +144,11 @@ public List<RoomTableusersresponse> getusersforagameroomtable(@Valid @RequestBod
     public Object pairingtest(@Valid @RequestBody CardPairingtest cardPairingtest){
 
         return roomService.cardpairingtest(cardPairingtest);
+    }
+    @PostMapping("/game_action")
+    public Object game_action(@Valid @RequestBody Gameactionrequest gameactionrequest){
+
+        return gameactionsservice.savegameaction(gameactionrequest);
     }
 
 

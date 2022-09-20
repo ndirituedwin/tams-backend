@@ -1,55 +1,29 @@
-package com.cardgame.Entity;
+package com.cardgame.Dto.requests.gamelogic.gameactions;
 
-
-import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.Date;
 
-@Entity
-@Table(name = "game_play_logs_table")
-public class Gameplaylog {
+public class Gameactionrequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     private Long player_uid;
 
     private Long gameRoomTableuid;
 
-    @Column(name = "action")
     private String action;
 
-    @Column(name = "amount")
     private BigDecimal amount;
 
-    @Column(name = "second_actionwas_performed")
     private Integer second;
 
-    @Column(name = "time_theactionwas_performed")
-    private Instant createddate;
-
-    public Gameplaylog() {
+    public Gameactionrequest() {
     }
 
-
-    public Gameplaylog(Long id, Long player_uid, Long gameRoomTableuid, String action, BigDecimal amount, Integer second, Instant createddate) {
-        this.id = id;
+    public Gameactionrequest(Long player_uid, Long gameRoomTableuid, String action, BigDecimal amount, Integer second) {
         this.player_uid = player_uid;
         this.gameRoomTableuid = gameRoomTableuid;
         this.action = action;
         this.amount = amount;
         this.second = second;
-        this.createddate = createddate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getPlayer_uid() {
@@ -92,11 +66,5 @@ public class Gameplaylog {
         this.second = second;
     }
 
-    public Instant getCreateddate() {
-        return createddate;
-    }
 
-    public void setCreateddate(Instant createddate) {
-        this.createddate = createddate;
-    }
 }

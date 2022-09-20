@@ -25,4 +25,7 @@ public class ApiUtils {
     public static final  String PLAYER_ONE="PLAYER_ONE";
     public static final  String PLAYER_TWO="PLAYER_TWO";
 
+    public static final  String WON_GAME="WON_GAME";
+
+
 }
