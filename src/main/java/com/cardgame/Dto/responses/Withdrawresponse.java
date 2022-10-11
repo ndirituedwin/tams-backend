@@ -8,6 +8,10 @@ public class Withdrawresponse {
     private String message;
     private BigDecimal amountavailable;
 
+    public Withdrawresponse(String message) {
+        this.message = message;
+    }
+
     public Withdrawresponse(String message, BigDecimal amountavailable) {
         this.message = message;
         this.amountavailable = amountavailable;

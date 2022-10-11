@@ -38,6 +38,7 @@ public class ModelMapper {
         return userCardResponse;
 
     }
+    
 
     public static GameRoomResponse mapgameroomtogameroomresponse(Gameroommaster gameRoom) {
         GameRoomResponse gameRoomResponse=new GameRoomResponse();
@@ -79,6 +80,48 @@ public class ModelMapper {
         buyintableresponse.setUid(buyIn1.getUser().getUID());
         return buyintableresponse;
     }
+
+
+    public static Cardsownedbycurrentplayerresponse Cardsownedbycurrentplayerresponse(UserCard userCard, User user) {
+//        public static Cardsownedbycurrentplayerresponse Cardsownedbycurrentplayerresponse(UserCard userCard) {
+        Cardsownedbycurrentplayerresponse cardsownedbycurrentplayerresponse =new Cardsownedbycurrentplayerresponse();
+
+        cardsownedbycurrentplayerresponse.setUid(user.getUID());
+        cardsownedbycurrentplayerresponse.setUsername(user.getUsername());
+//        cardsownedbycurrentplayerresponse.setUserwallet(user.getUserwallet());
+        cardsownedbycurrentplayerresponse.setUserCard(userCard);
+        return cardsownedbycurrentplayerresponse;
+
+    }
+
+    public static GetUserBest30cardsresponse mapuserbestcardstouserbestcardsresponse(User user, Userbestcard userbestcard) {
+
+        GetUserBest30cardsresponse getUserBest30cardsresponse=new GetUserBest30cardsresponse();
+        getUserBest30cardsresponse.setUid(user.getUID());
+        getUserBest30cardsresponse.setUsername(user.getUsername());
+        getUserBest30cardsresponse.setUserbestcard(userbestcard);
+//        getUserBest30cardsresponse.setUserbestcardList(userbestcard);
+
+   return getUserBest30cardsresponse;
+    }
+
+    public static Marketplacecardsresponse mapmarketplacepackstomarketplaceresponse(Pack pack) {
+        Marketplacecardsresponse marketplacecardsresponse=new Marketplacecardsresponse();
+//        marketplacecardsresponse.setPack(pack);
+        marketplacecardsresponse.setId(pack.getId());
+        marketplacecardsresponse.setNumberofcards(pack.getNumberofcards());
+        marketplacecardsresponse.setGold(pack.getGold());
+        marketplacecardsresponse.setSilver(pack.getSilver());
+        marketplacecardsresponse.setBronze(pack.getBronze());
+        marketplacecardsresponse.setTrainer(pack.getTrainer());
+        marketplacecardsresponse.setImage(pack.getImage());
+        marketplacecardsresponse.setPrice(pack.getPrice());
+        marketplacecardsresponse.setPacktype(pack.getPacktype());
+        marketplacecardsresponse.setPackname(pack.getPackname());
+        return marketplacecardsresponse;
+    }
+
+
 //    public static RoomTableusersresponse maptableuserstotableuserresponse(User user) {
 //        RoomTableusersresponse roomTableusersresponse=new RoomTableusersresponse();
 //        roomTableusersresponse.setUser(user);

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,14 +17,25 @@ public class User implements Serializable {
 
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
+    @JsonIgnore
     @Column(unique = true)
     private Long id;
 
+    @Column(unique = true)
     private String username;
 
 
     @Id
     private Long UID;
+
+
+
+    @Column(name = "mobile_number",unique = true)
+//    @Size(max = 10,min = 10, message = "Invalid mobile number length")
+    private String mobilenumber;
+
+    @JsonIgnore
+    private String password;
 
 
 
@@ -63,6 +75,20 @@ public class User implements Serializable {
         this.id = id;
         this.username = username;
         this.UID = UID;
+    }
+
+    public User( String username, Long UID, String mobilenumber) {
+        this.username = username;
+        this.UID = UID;
+        this.mobilenumber = mobilenumber;
+    }
+
+    public User(Long id, String username, Long UID, String mobilenumber, String password) {
+        this.id = id;
+        this.username = username;
+        this.UID = UID;
+        this.mobilenumber = mobilenumber;
+        this.password = password;
     }
 
     public User(Userwallet userwallet, List<BuyIn> buyIns, List<Gameroomlog> gameroomlogs, List<PackPricelisting> packPricelistings, List<Unopenedpack> unopenedpacks, List<Userbestcard> userbestcards, List<UserCard> userCards, List<Usercardfee> usercardfees) {
@@ -173,5 +199,21 @@ public class User implements Serializable {
 
     public void setUsercardfees(List<Usercardfee> usercardfees) {
         this.usercardfees = usercardfees;
+    }
+
+    public String getMobilenumber() {
+        return mobilenumber;
+    }
+
+    public void setMobilenumber(String mobilenumber) {
+        this.mobilenumber = mobilenumber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -5,12 +5,14 @@ import com.cardgame.Dto.requests.Getwalletbaancerequest;
 import com.cardgame.Dto.requests.Userprofilerequest;
 import com.cardgame.Dto.requests.Withdrawmoneyrequest;
 import com.cardgame.Dto.responses.Addmoneytowaletresponse;
+import com.cardgame.Dto.responses.CurrentUserResponse;
 import com.cardgame.Dto.responses.Userwalletbalance;
 import com.cardgame.Dto.responses.Withdrawresponse;
 import com.cardgame.Entity.*;
 import com.cardgame.Exceptions.UserNotFoundException;
 import com.cardgame.Exceptions.UserWalletNotFoundException;
 import com.cardgame.Repo.*;
+import com.cardgame.config.Auth.security.Securitytwo.Security.UserPrincipal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +38,10 @@ public class UserwalletService {
         this.changingwalletbalancerepo = changingwalletbalancerepo;
     }
 
-    public Userwalletbalance getwalletservice(Getwalletbaancerequest getwalletbaancerequest) {
+    public Userwalletbalance getwalletservice(UserPrincipal currentUser, Getwalletbaancerequest getwalletbaancerequest) {
+        if (currentUser==null){
+            return new Userwalletbalance("You are unauthenticated");
+        }
         if (getwalletbaancerequest.getUid()==null || getwalletbaancerequest.getUid()==0){
             return new Userwalletbalance("uid may not be null");
         }
@@ -60,8 +65,11 @@ public class UserwalletService {
     }
 
     @Transactional
-    public Addmoneytowaletresponse addmoneytowallet(Addmoneytowalletrequest addmoneytowallet) {
+    public Addmoneytowaletresponse addmoneytowallet(UserPrincipal currentUser, Addmoneytowalletrequest addmoneytowallet) {
 
+        if (currentUser==null){
+            return new Addmoneytowaletresponse("You are unauthenticated");
+        }
         if (addmoneytowallet.getAmount()==null){
             return new Addmoneytowaletresponse("amount may not be null");
         }
@@ -144,8 +152,10 @@ public class UserwalletService {
     }
 
     @Transactional
-    public Withdrawresponse withdraw(Withdrawmoneyrequest withdrawmoneyrequest) {
-
+    public Withdrawresponse withdraw(UserPrincipal currentUser, Withdrawmoneyrequest withdrawmoneyrequest) {
+          if (currentUser==null){
+              return new Withdrawresponse("You are unauthenticated");
+          }
         if (withdrawmoneyrequest.getWithdrawamount()==null){
             return new Withdrawresponse("amount to withdraw may not  be null",withdrawmoneyrequest.getWithdrawamount());
         }
@@ -197,16 +207,24 @@ public class UserwalletService {
         return null;
     }
 
-    public Object getuserprofile(Userprofilerequest userprofilerequest) {
-        if (userprofilerequest==null){
-            return "the request body may not be null";
-        }
-        try {
-            User user= userrepo.findById(userprofilerequest.getUserid()).orElseThrow(() -> new UserNotFoundException("User with the provided user id not found "));
+//    public CurrentUserResponse getuserprofile(UserPrincipal currentUser, Userprofilerequest userprofilerequest) {
+        public CurrentUserResponse getuserprofile(UserPrincipal currentUser) {
+      System.out.println("currentUser "+currentUser);
 
-              return user;
+        if (currentUser==null){
+            return new CurrentUserResponse("You are not authenticated");
+
+        }
+
+//        if (userprofilerequest==null){
+//            return "the request body may not be null";
+//        }
+        try {
+//            User user= userrepo.findById(userprofilerequest.getUserid()).orElseThrow(() -> new UserNotFoundException("User with the provided user id not found "));
+            return new CurrentUserResponse(currentUser.getId(), currentUser.getUid(), currentUser.getUsername(), currentUser.getMobilenumber());
+
         }catch (Exception e){
-            return "An exception has occurred while fetching the user profile "+e.getMessage();
+            return new CurrentUserResponse("An exception has occurred while fetching the user profile "+e.getMessage());
         }
     }
 }

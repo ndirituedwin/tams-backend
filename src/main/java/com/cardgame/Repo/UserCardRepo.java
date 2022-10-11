@@ -15,7 +15,10 @@ import java.util.Optional;
 
 @Repository
 public interface UserCardRepo extends JpaRepository<UserCard,Long> {
+
+
     List<UserCard> findAllByUser(User user);
+    Page<UserCard> findAllByUser(User user, Pageable pageable);
 
 //    List<UserCard> findAllByPack(Pack pack1);
 
@@ -31,4 +34,5 @@ public interface UserCardRepo extends JpaRepository<UserCard,Long> {
     List<UserCard> findAllByUnopenedpack(Unopenedpack unopenedpack);
 
     Page<UserCard> findAllByUserAndOpenedcardEquals(User user, boolean b, Pageable pageable);
+
 }

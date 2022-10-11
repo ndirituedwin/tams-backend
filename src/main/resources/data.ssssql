@@ -1,3 +1,4 @@
 INSERT INTO pack_table(pack_name,pack_type,number_of_cards) VALUES('packone','packtypeone',5);
 INSERT INTO pack_table(pack_name,pack_type,number_of_cards) VALUES('packtwo','packtypetwo',7);
 INSERT INTO pack_table(pack_name,pack_type,number_of_cards) VALUES('packthree','packtypethree',10);
+INSERT INTO pack_table(pack_name,pack_type,number_of_cards,price,gold,silver,bronze,trainer) VALUES('starter pack','starter pack',10,0,0,3,6,1);

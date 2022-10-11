@@ -10,8 +10,20 @@ public class Updateplayerbuyinresponse {
     private BigDecimal buyin;
     private Long buyInId;
     private String status;
+    private Integer numberofplayers;
+
+
 
     public Updateplayerbuyinresponse() {
+    }
+
+    public Updateplayerbuyinresponse(String message, Long uid, BigDecimal buyin, Long buyInId, String status, Integer numberofplayers) {
+        this.message = message;
+        this.uid = uid;
+        this.buyin = buyin;
+        this.buyInId = buyInId;
+        this.status = status;
+        this.numberofplayers = numberofplayers;
     }
 
     public Updateplayerbuyinresponse(String message, Long uid, BigDecimal buyin, Long buyInId, String status) {
@@ -65,5 +77,13 @@ public class Updateplayerbuyinresponse {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getNumberofplayers() {
+        return numberofplayers;
+    }
+
+    public void setNumberofplayers(Integer numberofplayers) {
+        this.numberofplayers = numberofplayers;
     }
 }

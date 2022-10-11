@@ -1,9 +1,14 @@
 package com.cardgame.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
+
+//you updated user wallet on sep 29
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 
 @Table(name = "user_wallet")
 @Entity

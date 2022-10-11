@@ -30,7 +30,7 @@ public class Userbestcard implements Serializable {
 
     //    @JsonIgnore
 //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @JoinColumn(name="usercard_id")
+    @JoinColumn(name="usercard_id",unique = true)
     @OneToOne(fetch = FetchType.LAZY)
     private UserCard  userCard;
 

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 
@@ -28,7 +29,24 @@ public class Pack implements Serializable {
     @Column(name = "number_of_cards")
     private long numberofcards;
 
+    private String image;
+
+    private BigDecimal price;
+    private Long gold;
+    private Long silver;
+    private Long bronze;
+    private Long trainer;
+
     public Pack() {
+    }
+
+    public Pack(String image, BigDecimal price, Long gold, Long silver, Long bronze, Long trainer) {
+        this.image = image;
+        this.price = price;
+        this.gold = gold;
+        this.silver = silver;
+        this.bronze = bronze;
+        this.trainer = trainer;
     }
 
     public Pack(long id, String packname, String packtype, long numberofcards) {
@@ -68,5 +86,53 @@ public class Pack implements Serializable {
 
     public void setNumberofcards(long numberofcards) {
         this.numberofcards = numberofcards;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Long getGold() {
+        return gold;
+    }
+
+    public void setGold(Long gold) {
+        this.gold = gold;
+    }
+
+    public Long getSilver() {
+        return silver;
+    }
+
+    public void setSilver(Long silver) {
+        this.silver = silver;
+    }
+
+    public Long getBronze() {
+        return bronze;
+    }
+
+    public void setBronze(Long bronze) {
+        this.bronze = bronze;
+    }
+
+    public Long getTrainer() {
+        return trainer;
+    }
+
+    public void setTrainer(Long trainer) {
+        this.trainer = trainer;
     }
 }

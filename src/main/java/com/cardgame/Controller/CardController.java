@@ -4,6 +4,8 @@ import com.cardgame.Dto.requests.*;
 import com.cardgame.Dto.responses.*;
 import com.cardgame.Dto.responses.Page.PagedResponse;
 import com.cardgame.Service.CardService;
+import com.cardgame.config.Auth.security.Securitytwo.Security.CurrentUser;
+import com.cardgame.config.Auth.security.Securitytwo.Security.UserPrincipal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +37,7 @@ private final CardService cardService;
         return cardService.testcontroller(uid);
     }
     @PostMapping("/card_duplicate")
-    public ResponseEntity<?> duplicatecard(@Valid @RequestBody Cardduplicaterequest cardduplicaterequest, BindingResult result){
+    public ResponseEntity<?> duplicatecard(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody Cardduplicaterequest cardduplicaterequest, BindingResult result){
         if (result.hasErrors()){
             Map<String,String> errorMap=new HashMap<>();
             for (FieldError err: result.getFieldErrors()){
@@ -47,7 +49,7 @@ private final CardService cardService;
         }
     }
     @PostMapping("/card_duplicate_byuser_ratio")
-    public ResponseEntity<?> duplicatecardbyuserratio(@Valid @RequestBody Cardbyratioduplicaterequest cardbyratioduplicaterequest, BindingResult result){
+    public ResponseEntity<?> duplicatecardbyuserratio(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody Cardbyratioduplicaterequest cardbyratioduplicaterequest, BindingResult result){
         if (result.hasErrors()){
             Map<String,String> errorMap=new HashMap<>();
             for (FieldError err: result.getFieldErrors()){
@@ -60,7 +62,7 @@ private final CardService cardService;
     }
 
     @PostMapping("/card_select_pack")
-    public ResponseEntity<?> cardpack(@Valid @RequestBody Selectpackrequest selectpackrequest, BindingResult result){
+    public ResponseEntity<?> cardpack(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody Selectpackrequest selectpackrequest, BindingResult result){
         if (result.hasErrors()){
             Map<String,String> errorMap=new HashMap<>();
             for (FieldError err: result.getFieldErrors()){
@@ -71,10 +73,22 @@ private final CardService cardService;
             return new ResponseEntity<>(cardService.usercards(selectpackrequest), HttpStatus.CREATED);
         }
     }
+    @PostMapping("/checkpackstatus")
+    public ResponseEntity<?> checkpackstatus(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody Selectpackrequest selectpackrequest, BindingResult result){
+        if (result.hasErrors()){
+            Map<String,String> errorMap=new HashMap<>();
+            for (FieldError err: result.getFieldErrors()){
+                errorMap.put(err.getField(),err.getDefaultMessage());
+            }
+            return new ResponseEntity<Map<String,String>>(errorMap, HttpStatus.BAD_REQUEST);
+        }else{
+            return new ResponseEntity<>(cardService.checkpackstatus(selectpackrequest), HttpStatus.CREATED);
+        }
+    }
 
 
     @PostMapping("/postbest30cards_forauser")
-    public ResponseEntity<?> postbest30cards_forauser(@Valid @RequestBody Userbestcardrequest userbestcardrequest, BindingResult result ){
+    public ResponseEntity<?> postbest30cards_forauser(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody Userbestcardrequest userbestcardrequest, BindingResult result ){
 
         if (result.hasErrors()){
             Map<String,String> errorMap=new HashMap<>();
@@ -87,8 +101,34 @@ private final CardService cardService;
         }
     }
 
-    @PostMapping("/unopened_packs")
-    public ResponseEntity<?> unopened_packs(@Valid @RequestBody Unopenedpackrequest unopenedpackrequest, BindingResult result ){
+    @PostMapping("/getuserbest30cards")
+    public PagedResponse<GetUserBest30cardsresponse> getallcardsforauser(@Valid  @RequestBody Getuserbestcardrequest getuserbestcardrequest,BindingResult result,
+            @RequestParam(value = "page",defaultValue =DEFAULT_PAGE_NUMBER) int page,
+            @RequestParam(value = "size",defaultValue = DEFAULT_PAGE_SIZE)  int size){
+
+            return cardService.getUserBest30cardsresponse(page,size,getuserbestcardrequest);
+
+    }
+    @PostMapping("resetdeck")
+    public UserbestCardResponse resetdeck(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody Removebestcardrequest removebestcardrequest){
+        return cardService.removeallbestcardsforaplayer(removebestcardrequest);
+    }
+    @PostMapping("/removecard")
+    public ResponseEntity<?> removecard(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody Removebestcardrequest removebestcardrequest, BindingResult result ) {
+        if (result.hasErrors()){
+            Map<String,String> errorMap=new HashMap<>();
+            for (FieldError err: result.getFieldErrors()){
+                errorMap.put(err.getField(),err.getDefaultMessage());
+            }
+            return new ResponseEntity<Map<String,String>>(errorMap, HttpStatus.BAD_REQUEST);
+        }else{
+            return new ResponseEntity<>(cardService.removecard(removebestcardrequest),HttpStatus.OK);
+        }
+    }
+
+
+        @PostMapping("/unopened_packs")
+    public ResponseEntity<?> unopened_packs(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody Unopenedpackrequest unopenedpackrequest, BindingResult result ){
 
         if (result.hasErrors()){
             Map<String,String> errorMap=new HashMap<>();
@@ -102,7 +142,7 @@ private final CardService cardService;
     }
 
     @PostMapping("/buy-card")
-    public ResponseEntity<?> buycard(@Valid @RequestBody BuyCardRequest buyCardRequest, BindingResult result){
+    public ResponseEntity<?> buycard(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody BuyCardRequest buyCardRequest, BindingResult result){
 
         if (result.hasErrors()){
             Map<String,String> errorMap=new HashMap<>();
@@ -117,38 +157,38 @@ private final CardService cardService;
     @GetMapping("/getallusercards")
     public PagedResponse<UserCardResponse> getallcardsforauser(
             @RequestParam(value = "page",defaultValue =DEFAULT_PAGE_NUMBER) int page,
-            @RequestParam(value = "size",defaultValue = DEFAULT_PAGE_SIZE)  int size,@Valid @RequestBody FindAllCardsByUserrequest findAllCardsByUserrequest
+            @RequestParam(value = "size",defaultValue = DEFAULT_PAGE_SIZE)  int size,@CurrentUser UserPrincipal currentUser, @Valid @RequestBody FindAllCardsByUserrequest findAllCardsByUserrequest
     ){
 //        return ResponseEntity.ok(cardService.findallcardsbyuser());
         return cardService.findallcardsbyuser(page, size,findAllCardsByUserrequest);
     }
     @PostMapping("/setfeeforusercard")
-    public ResponseEntity<?> setcardfeeforauser(@Valid @RequestBody CardfeeRequest cardfeeRequest){
+    public ResponseEntity<?> setcardfeeforauser(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody CardfeeRequest cardfeeRequest){
 
         return ResponseEntity.ok(cardService.setcardfee(cardfeeRequest));
     }
 
     @PostMapping("/setfeeforpack")
-    public ResponseEntity<?> setpackfeeforauser(@Valid @RequestBody PackfeeRequest packfeeRequest){
+    public ResponseEntity<?> setpackfeeforauser(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody PackfeeRequest packfeeRequest){
 
         return ResponseEntity.ok(cardService.setpackfee(packfeeRequest));
     }
 
     @PostMapping("/updatecardstatus")
-    public ResponseEntity<?> changecardstatus(@Valid @RequestBody BoughtpackStatusRequest boughtpackStatusRequest){
+    public ResponseEntity<?> changecardstatus(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody BoughtpackStatusRequest boughtpackStatusRequest){
 
         return ResponseEntity.ok(cardService.updateboughtpackstatus(boughtpackStatusRequest));
     }
 
     @PostMapping("/buy-pack")
-    public ResponseEntity<?> buypack(@Valid @RequestBody BuyPackRequest buyPackRequest){
+    public ResponseEntity<?> buypack(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody BuyPackRequest buyPackRequest){
 
         return ResponseEntity.ok(cardService.buypack(buyPackRequest));
 
     }
 
     @PostMapping("/update-card-fee-status")
-    public ResponseEntity<?> updatecardfeestatus(@Valid @RequestBody CardStatusupdate cardStatusupdate){
+    public ResponseEntity<?> updatecardfeestatus(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody CardStatusupdate cardStatusupdate){
 
         return ResponseEntity.ok(cardService.updatecardfee(cardStatusupdate));
 
@@ -161,7 +201,7 @@ private final CardService cardService;
 
     }
     @PostMapping("/update-pack-fee-status")
-    public ResponseEntity<?> updatepackfeestatus(@Valid @RequestBody Packstatusupdate cardStatusupdate){
+    public ResponseEntity<?> updatepackfeestatus(@CurrentUser UserPrincipal currentUser, @Valid @RequestBody Packstatusupdate cardStatusupdate){
 
         return ResponseEntity.ok(cardService.updatepackfee(cardStatusupdate));
 
@@ -186,6 +226,17 @@ private final CardService cardService;
         return cardService.allgameroomusers(page, size);
     }
 
+    @PostMapping("/user-and-user-cards")
+    public PagedResponse<Cardsownedbycurrentplayerresponse> Cardsownedbycurrentplayerresponse(@Valid  @RequestBody Userprofilerequest userprofilerequest,
+                                                                                          @RequestParam(value = "page",defaultValue =DEFAULT_PAGE_NUMBER) int page,
+                                                                                          @RequestParam(value = "size",defaultValue = DEFAULT_PAGE_SIZE)  int size) {
+        return cardService.kardsownedbycurrentplayerresponse(userprofilerequest, page, size);
 
+    }
+
+    @GetMapping("/getstarterpack")
+    public Object getstarterpack(){
+        return cardService.getstarterpack();
+    }
 
 }

@@ -9,6 +9,7 @@ import com.cardgame.Dto.responses.Buyintableresponse;
 import com.cardgame.Dto.responses.GameRoomResponse;
 import com.cardgame.Dto.responses.Page.PagedResponse;
 import com.cardgame.Dto.responses.RoomTableusersresponse;
+import com.cardgame.Dto.responses.Roomcountresponse;
 import com.cardgame.Service.Gameactionsservice;
 import com.cardgame.Service.RoomService;
 import org.springframework.http.HttpStatus;
@@ -150,6 +151,12 @@ public List<RoomTableusersresponse> getusersforagameroomtable(@Valid @RequestBod
 
         return gameactionsservice.savegameaction(gameactionrequest);
     }
+    @PostMapping("/roomcount")
+    public Roomcountresponse roomcounjt(Roomcountrequest roomcountrequest){
+
+        return roomService.roomcount(roomcountrequest);
+    }
+    
 
 
 

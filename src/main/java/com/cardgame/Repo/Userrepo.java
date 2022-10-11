@@ -8,11 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface Userrepo extends JpaRepository<User,Long> {
     Page<User> findAllByUIDIn(List<Long> userids, Pageable pageable);
     List<User> findAllByUIDIn(List<Long> userids);
+    Optional<User> findByUsernameOrMobilenumber(String username, String mobilenumber);
 
    /** @Query(value = "select i from ItemEntity i where i.secondaryId in :ids
             order by FIND_IN_SET(i.secondaryId, :idStr)")
@@ -21,4 +23,9 @@ public interface Userrepo extends JpaRepository<User,Long> {
     List<User> findAllByUIDInFindInSet(List<Long> uids,String uidstr);
 
 
+    boolean existsByUsername(String username);
+
+    boolean existsByMobilenumber(String mobile);
+
+    boolean existsByUID(Long uid);
 }
