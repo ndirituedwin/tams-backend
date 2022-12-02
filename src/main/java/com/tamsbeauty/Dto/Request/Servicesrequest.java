@@ -1,0 +1,18 @@
+package com.tamsbeauty.Dto.Request;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Servicesrequest {
+
+    private String description;
+    private BigDecimal cost;
+    private boolean isonoffer;
+
+}
